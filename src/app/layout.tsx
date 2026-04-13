@@ -23,7 +23,7 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "PUNCHED CARDS | When AI Goes Down, Go Analog",
+  title: "PUNCHED CARDS | When AI Goes Down, Go Physical",
   description:
     "Premium punch cards for the post-AI developer. Level up your skills when the machines stop thinking. 100% uptime guaranteed.",
 };

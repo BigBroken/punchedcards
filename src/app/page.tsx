@@ -269,7 +269,7 @@ export default function Home() {
           </h1>
 
           <p className="font-mono text-xl sm:text-2xl md:text-3xl lg:text-4xl text-amber glow-amber mb-16 animate-fade-up delay-3 tracking-wide">
-            GO ANALOG.
+            GO PHYSICAL.
           </p>
 
           {/* Punch Card Visual */}
