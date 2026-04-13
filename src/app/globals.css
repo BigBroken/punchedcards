@@ -1,26 +1,300 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-void: #08080A;
+  --color-surface: #111114;
+  --color-elevated: #1A1A1F;
+  --color-amber: #FF8C00;
+  --color-amber-bright: #FFB340;
+  --color-amber-dim: #CC7000;
+  --color-green: #39FF14;
+  --color-red: #FF2D2D;
+  --color-cream: #F5E6C8;
+  --color-cream-dark: #B8A88A;
+  --color-fg: #C8C2B4;
+  --color-fg-bright: #F0EBE0;
+  --color-fg-dim: #8A8279;
+
+  --font-heading: var(--font-playfair);
+  --font-mono: var(--font-ibm-plex-mono);
+  --font-body: var(--font-newsreader);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── BASE ── */
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-void);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: rgba(255, 140, 0, 0.3);
+  color: var(--color-fg-bright);
+}
+
+/* ── CRT EFFECTS ── */
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.05) 2px,
+    rgba(0, 0, 0, 0.05) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ── ANIMATIONS ── */
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  animation: ticker-scroll 80s linear infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(-1.5deg);
+  }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 currentColor;
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+    opacity: 0.7;
+  }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.delay-1 {
+  animation-delay: 0.1s;
+}
+.delay-2 {
+  animation-delay: 0.25s;
+}
+.delay-3 {
+  animation-delay: 0.45s;
+}
+.delay-4 {
+  animation-delay: 0.65s;
+}
+.delay-5 {
+  animation-delay: 0.85s;
+}
+.delay-6 {
+  animation-delay: 1.05s;
+}
+
+/* Scroll-triggered reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── GLOW EFFECTS ── */
+
+.glow-amber {
+  text-shadow:
+    0 0 10px rgba(255, 140, 0, 0.5),
+    0 0 40px rgba(255, 140, 0, 0.15);
+}
+
+.glow-green {
+  text-shadow:
+    0 0 10px rgba(57, 255, 20, 0.5),
+    0 0 40px rgba(57, 255, 20, 0.15);
+}
+
+.glow-red {
+  text-shadow:
+    0 0 10px rgba(255, 45, 45, 0.5),
+    0 0 40px rgba(255, 45, 45, 0.15);
+}
+
+.group:hover .icon-glow {
+  text-shadow:
+    0 0 12px rgba(255, 140, 0, 0.6),
+    0 0 40px rgba(255, 140, 0, 0.2);
+}
+
+/* ── PUNCH CARD ── */
+
+.punch-hole-active {
+  background: var(--color-void) !important;
+  box-shadow:
+    0 0 3px rgba(255, 140, 0, 0.4),
+    inset 0 0 2px rgba(255, 140, 0, 0.2);
+}
+
+.product-card {
+  position: relative;
+  background: linear-gradient(160deg, #f5e6c8 0%, #ead9b2 50%, #e0cca5 100%);
+  clip-path: polygon(22px 0, 100% 0, 100% 100%, 0 100%, 0 22px);
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s;
+}
+
+.product-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 22px,
+    rgba(0, 0, 0, 0.02) 22px,
+    rgba(0, 0, 0, 0.02) 23px
+  );
+  pointer-events: none;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(255, 140, 0, 0.12);
+}
+
+/* ── PUNCH ANIMATION ── */
+
+@keyframes punch {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-punch {
+  animation: punch 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── STEAM (mug) ── */
+
+@keyframes steam {
+  0% {
+    transform: translateY(0) scaleX(1);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-28px) scaleX(1.8);
+    opacity: 0;
+  }
+}
+
+.steam-1 {
+  animation: steam 2.2s ease-out infinite;
+}
+.steam-2 {
+  animation: steam 2.2s ease-out infinite 0.5s;
+}
+.steam-3 {
+  animation: steam 2.2s ease-out infinite 1s;
+}
+
+/* ── SCROLLBAR ── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-void);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a30;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
 }
