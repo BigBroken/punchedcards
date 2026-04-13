@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Card body -->
+  <path d="M6 0 L32 0 L32 32 L0 32 L0 6 Z" fill="#F5E6C8"/>
+  <!-- Clipped corner fold -->
+  <path d="M0 6 L6 0 L6 6 Z" fill="#D4C4A0"/>
+  <!-- Punched holes (dark with amber glow) -->
+  <rect x="4" y="10" width="3" height="4" rx="0.5" fill="#08080A"/>
+  <rect x="10" y="10" width="3" height="4" rx="0.5" fill="#08080A"/>
+  <rect x="22" y="10" width="3" height="4" rx="0.5" fill="#08080A"/>
+  <rect x="10" y="17" width="3" height="4" rx="0.5" fill="#08080A"/>
+  <rect x="16" y="17" width="3" height="4" rx="0.5" fill="#08080A"/>
+  <rect x="28" y="17" width="3" height="4" rx="0.5" fill="#08080A"/>
+  <rect x="4" y="24" width="3" height="4" rx="0.5" fill="#08080A"/>
+  <rect x="16" y="24" width="3" height="4" rx="0.5" fill="#08080A"/>
+  <rect x="22" y="24" width="3" height="4" rx="0.5" fill="#08080A"/>
+  <!-- Unpunched holes (subtle) -->
+  <rect x="16" y="10" width="3" height="4" rx="0.5" fill="#D4C4A0" opacity="0.4"/>
+  <rect x="28" y="10" width="3" height="4" rx="0.5" fill="#D4C4A0" opacity="0.4"/>
+  <rect x="4" y="17" width="3" height="4" rx="0.5" fill="#D4C4A0" opacity="0.4"/>
+  <rect x="22" y="17" width="3" height="4" rx="0.5" fill="#D4C4A0" opacity="0.4"/>
+  <rect x="10" y="24" width="3" height="4" rx="0.5" fill="#D4C4A0" opacity="0.4"/>
+  <rect x="28" y="24" width="3" height="4" rx="0.5" fill="#D4C4A0" opacity="0.4"/>
+</svg>
