@@ -229,18 +229,18 @@ export default function Home() {
           >
             PUNCHED CARDS&trade;
           </a>
-          <div className="flex items-center gap-6 font-mono text-xs">
+          <div className="flex items-center gap-3 sm:gap-6 font-mono text-xs">
             <a
               href="/guide"
-              className="text-fg-dim hover:text-amber tracking-[0.15em] transition-colors hidden sm:block"
+              className="text-fg-dim hover:text-amber tracking-[0.1em] sm:tracking-[0.15em] transition-colors text-[10px] sm:text-xs"
             >
-              LLM GUIDE
+              GUIDE
             </a>
             <a
               href="/certify"
-              className="text-fg-dim hover:text-amber tracking-[0.15em] transition-colors hidden sm:block"
+              className="text-fg-dim hover:text-amber tracking-[0.1em] sm:tracking-[0.15em] transition-colors text-[10px] sm:text-xs"
             >
-              GET CERTIFIED
+              CERTIFY
             </a>
             <div className="flex items-center gap-2">
               <span
