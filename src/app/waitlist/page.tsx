@@ -153,8 +153,17 @@ export default function Waitlist() {
     setTimeout(() => setJustPunched(null), 300);
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!canSubmit) return;
+    try {
+      await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailString }),
+      });
+    } catch {
+      // Submit anyway — the card has been filed locally
+    }
     setSubmitted(true);
   }
 
