@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 /* ═══════════════════════════════════════════
@@ -82,7 +82,7 @@ const QUESTIONS = [
     options: ["17.8 meters", "56 meters", "178 meters", "1,780 meters"],
     correct: 2,
     explanation:
-      "1,000,000 \× 0.178 mm = 178,000 mm = 178 meters. That\’s roughly the height of a 50-story building.",
+      "1,000,000 \× 0.178 mm = 178,000 mm = 178 meters. That\'s roughly the height of a 50-story building.",
   },
   {
     question:
@@ -95,7 +95,7 @@ const QUESTIONS = [
     ],
     correct: 0,
     explanation:
-      "In Hollerith encoding, letters A\–I use Zone 12 (the top zone punch) plus digit rows 1\–9. So \‘A\’ = Row 12 (zone) + Row 1 (digit).",
+      "In Hollerith encoding, letters A\–I use Zone 12 (the top zone punch) plus digit rows 1\–9. So \'A\' = Row 12 (zone) + Row 1 (digit).",
   },
   {
     question:
@@ -119,6 +119,8 @@ const QUESTIONS = [
       "1 TB \≈ 1.1 \× 10\¹\² bytes \÷ 80 \≈ 13.74 billion cards. Weight: 13.74 \× 10\⁹ \× 1.764 g \≈ 24,244 metric tons \— about four Eiffel Towers.",
   },
 ];
+
+const MATH_QUESTIONS = new Set([1, 3, 4, 5, 6, 8, 9]);
 
 /* ═══════════════════════════════════════════
    HELPERS
@@ -144,7 +146,8 @@ export default function Certify() {
   const [confirmed, setConfirmed] = useState(false);
   const [score, setScore] = useState(0);
   const [copied, setCopied] = useState<string | null>(null);
-  const [showAbacus, setShowAbacus] = useState(false);
+
+  /* ── Abacus state ── */
   const [abacus, setAbacus] = useState(
     () => Array.from({ length: 13 }, () => ({ heaven: false, earth: 0 })),
   );
@@ -179,82 +182,9 @@ export default function Certify() {
     setAbacus(Array.from({ length: 13 }, () => ({ heaven: false, earth: 0 })));
   }
 
-  // Mechanical calculator state
-  const [showCalc, setShowCalc] = useState(false);
-  const [calcDisplay, setCalcDisplay] = useState("0");
-  const [calcPrev, setCalcPrev] = useState<number | null>(null);
-  const [calcOp, setCalcOp] = useState<string | null>(null);
-  const [calcReset, setCalcReset] = useState(false);
-
-  function calcInput(digit: string) {
-    if (calcReset) {
-      setCalcDisplay(digit);
-      setCalcReset(false);
-    } else {
-      setCalcDisplay((d) => (d === "0" ? digit : d + digit));
-    }
-  }
-
-  function calcOperator(op: string) {
-    const current = parseFloat(calcDisplay);
-    if (calcPrev !== null && calcOp && !calcReset) {
-      const result = calcExecute(calcPrev, current, calcOp);
-      setCalcDisplay(formatCalcResult(result));
-      setCalcPrev(result);
-    } else {
-      setCalcPrev(current);
-    }
-    setCalcOp(op);
-    setCalcReset(true);
-  }
-
-  function calcEquals() {
-    if (calcPrev === null || !calcOp) return;
-    const current = parseFloat(calcDisplay);
-    const result = calcExecute(calcPrev, current, calcOp);
-    setCalcDisplay(formatCalcResult(result));
-    setCalcPrev(null);
-    setCalcOp(null);
-    setCalcReset(true);
-  }
-
-  function calcExecute(a: number, b: number, op: string): number {
-    switch (op) {
-      case "+": return a + b;
-      case "-": return a - b;
-      case "×": return a * b;
-      case "÷": return b !== 0 ? a / b : 0;
-      default: return b;
-    }
-  }
-
-  function formatCalcResult(n: number): string {
-    if (Number.isInteger(n) && Math.abs(n) < 1e15) return n.toString();
-    if (Math.abs(n) < 0.0001 || Math.abs(n) >= 1e15) return n.toExponential(4);
-    return parseFloat(n.toFixed(6)).toString();
-  }
-
-  function calcClear() {
-    setCalcDisplay("0");
-    setCalcPrev(null);
-    setCalcOp(null);
-    setCalcReset(false);
-  }
-
-  // Which sidebar tool is open
-  const [activeTool, setActiveTool] = useState<"abacus" | "calc" | null>(null);
-
-  // Auto-show tools panel starting at question 2
-  useEffect(() => {
-    if (phase === "quiz" && currentQ === 1 && activeTool === null) {
-      setActiveTool("abacus");
-      setShowAbacus(true);
-    }
-  }, [currentQ, phase, activeTool]);
-
-  const sidebarOpen = activeTool !== null && phase === "quiz";
-
+  /* ── Computed ── */
   const q = QUESTIONS[currentQ];
+  const isMathQ = MATH_QUESTIONS.has(currentQ);
   const passed = score >= 7;
   const credentialId = generateCredentialId(name);
   const today = new Date().toLocaleDateString("en-US", {
@@ -318,7 +248,11 @@ export default function Certify() {
         </nav>
 
         <main className="flex-1 flex items-center justify-center px-6 py-12">
-          <div className="w-full max-w-2xl">
+          <div
+            className={`w-full transition-[max-width] duration-500 ease-in-out ${
+              phase === "quiz" && isMathQ ? "max-w-6xl" : "max-w-2xl"
+            }`}
+          >
             {/* ── INTRO ── */}
             {phase === "intro" && (
               <div className="text-center animate-fade-up delay-1">
@@ -334,6 +268,10 @@ export default function Certify() {
                   10 questions on analog computation, Hollerith encoding, data
                   density, and punch card engineering. Real calculations
                   required. No hand-holding.
+                </p>
+                <p className="font-body text-sm text-amber-dim max-w-sm mx-auto mb-3 leading-relaxed italic">
+                  Employers are actively seeking candidates with this
+                  in-demand certification. Stand out from the crowd.
                 </p>
                 <p className="font-mono text-xs text-amber mb-10">
                   PASSING SCORE: 7/10
@@ -387,96 +325,212 @@ export default function Certify() {
                   />
                 </div>
 
-                {/* Question */}
-                <h2 className="font-body text-lg sm:text-xl text-fg-bright leading-relaxed mb-8">
-                  {q.question}
-                </h2>
-
-                {/* Options */}
-                <div className="space-y-3 mb-8">
-                  {q.options.map((option, idx) => {
-                    let border = "border-amber/10 hover:border-amber/30";
-                    let bg = "bg-surface";
-                    let text = "text-fg";
-
-                    if (confirmed) {
-                      if (idx === q.correct) {
-                        border = "border-green/60";
-                        bg = "bg-green/5";
-                        text = "text-green";
-                      } else if (idx === selected && idx !== q.correct) {
-                        border = "border-red/60";
-                        bg = "bg-red/5";
-                        text = "text-red";
-                      } else {
-                        border = "border-amber/5";
-                        text = "text-fg-dim";
-                      }
-                    } else if (idx === selected) {
-                      border = "border-amber";
-                      bg = "bg-amber/5";
-                      text = "text-amber";
-                    }
-
-                    return (
-                      <button
-                        key={idx}
-                        onClick={() => !confirmed && setSelected(idx)}
-                        disabled={confirmed}
-                        className={`w-full text-left px-5 py-4 border ${border} ${bg} ${text} font-mono text-sm transition-all duration-200 cursor-pointer disabled:cursor-default flex items-start gap-3`}
-                      >
-                        <span className="text-fg-dim/40 shrink-0">
-                          {String.fromCharCode(65 + idx)})
-                        </span>
-                        {option}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Explanation */}
-                {confirmed && (
-                  <div
-                    className={`mb-8 p-4 border-l-2 ${
-                      selected === q.correct
-                        ? "border-green bg-green/5"
-                        : "border-red bg-red/5"
+                {/* Two-column grid for math questions, single column otherwise */}
+                <div
+                  className={
+                    isMathQ
+                      ? "lg:grid lg:grid-cols-[1fr_340px] lg:gap-8 items-start"
+                      : ""
+                  }
+                >
+                  {/* Question */}
+                  <h2
+                    className={`font-body text-lg sm:text-xl text-fg-bright leading-relaxed mb-8 ${
+                      isMathQ ? "lg:col-start-1" : ""
                     }`}
                   >
+                    {q.question}
+                  </h2>
+
+                  {/* ── INLINE TOOLS (math questions only) ── */}
+                  {isMathQ && (
+                    <div className="mb-8 lg:mb-0 lg:col-start-2 lg:row-start-1 lg:row-span-10">
+                      <div className="lg:sticky lg:top-20">
+                        <div className="border border-amber/10 bg-surface/80 backdrop-blur-sm p-4">
+                            <div className="flex items-center justify-between mb-4">
+                              <span className="font-mono text-[9px] text-fg-dim/40 tracking-wider">
+                                13-COLUMN SOROBAN
+                              </span>
+                              <button
+                                onClick={clearAbacus}
+                                className="font-mono text-[10px] text-fg-dim hover:text-amber transition-colors cursor-pointer"
+                              >
+                                CLEAR
+                              </button>
+                            </div>
+
+                            {/* Value display */}
+                            <div className="font-mono text-2xl text-amber glow-amber text-center mb-4 tabular-nums tracking-wide">
+                              {abacusValue.toLocaleString()}
+                            </div>
+
+                            {/* Abacus frame */}
+                            <div className="bg-elevated border border-amber/10 p-3 rounded-sm">
+                              <div className="flex justify-center gap-[4px]">
+                                {abacus.map((col, colIdx) => (
+                                  <div
+                                    key={colIdx}
+                                    className="flex flex-col items-center w-[20px]"
+                                  >
+                                    {/* Heaven section */}
+                                    <div className="h-12 flex flex-col items-center justify-end relative">
+                                      <div className="absolute inset-x-1/2 top-0 bottom-0 w-[1px] bg-amber/8 -translate-x-1/2" />
+                                      <button
+                                        onClick={() => toggleHeaven(colIdx)}
+                                        className={`relative z-10 w-[18px] h-[12px] rounded-[3px] cursor-pointer transition-all duration-200 border ${
+                                          col.heaven
+                                            ? "bg-amber border-amber/60 shadow-[0_0_10px_rgba(255,140,0,0.5)] translate-y-0"
+                                            : "bg-amber/8 border-amber/15 -translate-y-5"
+                                        }`}
+                                      />
+                                    </div>
+
+                                    {/* Bar */}
+                                    <div className="w-full h-[2px] bg-amber/40 my-[3px]" />
+
+                                    {/* Earth section */}
+                                    <div className="flex flex-col items-center relative">
+                                      <div className="absolute inset-x-1/2 top-0 bottom-0 w-[1px] bg-amber/8 -translate-x-1/2" />
+                                      {[0, 1, 2, 3].map((pos) => {
+                                        const active = pos < col.earth;
+                                        const isGap =
+                                          pos === col.earth &&
+                                          col.earth > 0 &&
+                                          col.earth < 4;
+                                        return (
+                                          <button
+                                            key={pos}
+                                            onClick={() =>
+                                              handleEarth(colIdx, pos)
+                                            }
+                                            className={`relative z-10 w-[18px] h-[12px] rounded-[3px] cursor-pointer transition-all duration-200 border ${
+                                              active
+                                                ? "bg-amber border-amber/60 shadow-[0_0_10px_rgba(255,140,0,0.5)]"
+                                                : "bg-amber/8 border-amber/15"
+                                            } ${isGap ? "mt-4" : "mt-[4px]"}`}
+                                          />
+                                        );
+                                      })}
+                                    </div>
+
+                                    {/* Place label */}
+                                    <div className="font-mono text-[7px] text-fg-dim/30 mt-2 select-none">
+                                      {
+                                        [
+                                          "T","","","B","","","M","","","K","","","1",
+                                        ][colIdx]
+                                      }
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            <p className="font-mono text-[9px] text-fg-dim/30 mt-4 leading-relaxed text-center">
+                              Click beads to move them toward or away from the
+                              bar.
+                              <br />
+                              Top bead = 5, bottom beads = 1 each.
+                            </p>
+                          </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Options */}
+                  <div
+                    className={`space-y-3 mb-8 ${
+                      isMathQ ? "lg:col-start-1" : ""
+                    }`}
+                  >
+                    {q.options.map((option, idx) => {
+                      let border = "border-amber/10 hover:border-amber/30";
+                      let bg = "bg-surface";
+                      let text = "text-fg";
+
+                      if (confirmed) {
+                        if (idx === q.correct) {
+                          border = "border-green/60";
+                          bg = "bg-green/5";
+                          text = "text-green";
+                        } else if (idx === selected && idx !== q.correct) {
+                          border = "border-red/60";
+                          bg = "bg-red/5";
+                          text = "text-red";
+                        } else {
+                          border = "border-amber/5";
+                          text = "text-fg-dim";
+                        }
+                      } else if (idx === selected) {
+                        border = "border-amber";
+                        bg = "bg-amber/5";
+                        text = "text-amber";
+                      }
+
+                      return (
+                        <button
+                          key={idx}
+                          onClick={() => !confirmed && setSelected(idx)}
+                          disabled={confirmed}
+                          className={`w-full text-left px-5 py-4 border ${border} ${bg} ${text} font-mono text-sm transition-all duration-200 cursor-pointer disabled:cursor-default flex items-start gap-3`}
+                        >
+                          <span className="text-fg-dim/40 shrink-0">
+                            {String.fromCharCode(65 + idx)})
+                          </span>
+                          {option}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Explanation */}
+                  {confirmed && (
                     <div
-                      className={`font-mono text-xs tracking-wider mb-2 ${
-                        selected === q.correct ? "text-green" : "text-red"
+                      className={`mb-8 p-4 border-l-2 ${
+                        isMathQ ? "lg:col-start-1" : ""
+                      } ${
+                        selected === q.correct
+                          ? "border-green bg-green/5"
+                          : "border-red bg-red/5"
                       }`}
                     >
-                      {selected === q.correct
-                        ? "\✓ CORRECT"
-                        : "\✗ INCORRECT"}
+                      <div
+                        className={`font-mono text-xs tracking-wider mb-2 ${
+                          selected === q.correct ? "text-green" : "text-red"
+                        }`}
+                      >
+                        {selected === q.correct
+                          ? "\u2713 CORRECT"
+                          : "\u2717 INCORRECT"}
+                      </div>
+                      <p className="font-body text-sm text-fg-dim leading-relaxed">
+                        {q.explanation}
+                      </p>
                     </div>
-                    <p className="font-body text-sm text-fg-dim leading-relaxed">
-                      {q.explanation}
-                    </p>
-                  </div>
-                )}
+                  )}
 
-                {/* Actions */}
-                {!confirmed ? (
-                  <button
-                    onClick={handleConfirm}
-                    disabled={selected === null}
-                    className="font-mono text-sm tracking-[0.15em] bg-amber text-void px-8 py-3 hover:bg-amber-bright transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                  >
-                    CONFIRM &rarr;
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleNext}
-                    className="font-mono text-sm tracking-[0.15em] bg-amber text-void px-8 py-3 hover:bg-amber-bright transition-colors cursor-pointer"
-                  >
-                    {currentQ + 1 >= QUESTIONS.length
-                      ? "VIEW RESULTS \→"
-                      : "NEXT QUESTION \→"}
-                  </button>
-                )}
+                  {/* Actions */}
+                  <div className={isMathQ ? "lg:col-start-1" : ""}>
+                    {!confirmed ? (
+                      <button
+                        onClick={handleConfirm}
+                        disabled={selected === null}
+                        className="font-mono text-sm tracking-[0.15em] bg-amber text-void px-8 py-3 hover:bg-amber-bright transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                      >
+                        CONFIRM &rarr;
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleNext}
+                        className="font-mono text-sm tracking-[0.15em] bg-amber text-void px-8 py-3 hover:bg-amber-bright transition-colors cursor-pointer"
+                      >
+                        {currentQ + 1 >= QUESTIONS.length
+                          ? "VIEW RESULTS \u2192"
+                          : "NEXT QUESTION \u2192"}
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
 
@@ -652,357 +706,6 @@ export default function Certify() {
           </div>
         </main>
       </div>
-      {/* ── TOOL SIDEBAR ── */}
-      {sidebarOpen && (
-        <div className="fixed top-14 right-0 bottom-0 w-[340px] z-40 border-l border-amber/15 bg-void/95 backdrop-blur-md shadow-[-8px_0_40px_rgba(0,0,0,0.4)] hidden lg:flex flex-col">
-          {/* Tab bar */}
-          <div className="flex border-b border-amber/10 shrink-0">
-            <button
-              onClick={() => setActiveTool("abacus")}
-              className={`flex-1 py-3 font-mono text-[10px] tracking-[0.2em] transition-colors cursor-pointer ${
-                activeTool === "abacus"
-                  ? "text-amber border-b-2 border-amber"
-                  : "text-fg-dim/50 hover:text-fg-dim"
-              }`}
-            >
-              SOROBAN
-            </button>
-            <button
-              onClick={() => setActiveTool("calc")}
-              className={`flex-1 py-3 font-mono text-[10px] tracking-[0.2em] transition-colors cursor-pointer ${
-                activeTool === "calc"
-                  ? "text-amber border-b-2 border-amber"
-                  : "text-fg-dim/50 hover:text-fg-dim"
-              }`}
-            >
-              CALCULATOR
-            </button>
-            <button
-              onClick={() => setActiveTool(null)}
-              className="px-4 py-3 font-mono text-[10px] text-fg-dim/30 hover:text-red transition-colors cursor-pointer"
-            >
-              ✕
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-5">
-            {/* ── ABACUS TAB ── */}
-            {activeTool === "abacus" && (
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-mono text-[9px] text-fg-dim/40 tracking-wider">
-                    13-COLUMN SOROBAN
-                  </span>
-                  <button
-                    onClick={clearAbacus}
-                    className="font-mono text-[10px] text-fg-dim hover:text-amber transition-colors cursor-pointer"
-                  >
-                    CLEAR
-                  </button>
-                </div>
-
-                {/* Value display */}
-                <div className="font-mono text-3xl text-amber glow-amber text-center mb-5 tabular-nums tracking-wide">
-                  {abacusValue.toLocaleString()}
-                </div>
-
-                {/* Abacus frame */}
-                <div className="bg-elevated border border-amber/10 p-3 rounded-sm">
-                  <div className="flex justify-center gap-[4px]">
-                    {abacus.map((col, colIdx) => (
-                      <div
-                        key={colIdx}
-                        className="flex flex-col items-center w-[20px]"
-                      >
-                        {/* Heaven section */}
-                        <div className="h-12 flex flex-col items-center justify-end relative">
-                          {/* Rod */}
-                          <div className="absolute inset-x-1/2 top-0 bottom-0 w-[1px] bg-amber/8 -translate-x-1/2" />
-                          <button
-                            onClick={() => toggleHeaven(colIdx)}
-                            className={`relative z-10 w-[18px] h-[12px] rounded-[3px] cursor-pointer transition-all duration-200 border ${
-                              col.heaven
-                                ? "bg-amber border-amber/60 shadow-[0_0_10px_rgba(255,140,0,0.5)] translate-y-0"
-                                : "bg-amber/8 border-amber/15 -translate-y-5"
-                            }`}
-                          />
-                        </div>
-
-                        {/* Bar */}
-                        <div className="w-full h-[2px] bg-amber/40 my-[3px]" />
-
-                        {/* Earth section */}
-                        <div className="flex flex-col items-center relative">
-                          {/* Rod */}
-                          <div className="absolute inset-x-1/2 top-0 bottom-0 w-[1px] bg-amber/8 -translate-x-1/2" />
-                          {[0, 1, 2, 3].map((pos) => {
-                            const active = pos < col.earth;
-                            const isGap =
-                              pos === col.earth &&
-                              col.earth > 0 &&
-                              col.earth < 4;
-                            return (
-                              <button
-                                key={pos}
-                                onClick={() => handleEarth(colIdx, pos)}
-                                className={`relative z-10 w-[18px] h-[12px] rounded-[3px] cursor-pointer transition-all duration-200 border ${
-                                  active
-                                    ? "bg-amber border-amber/60 shadow-[0_0_10px_rgba(255,140,0,0.5)]"
-                                    : "bg-amber/8 border-amber/15"
-                                } ${isGap ? "mt-4" : "mt-[4px]"}`}
-                              />
-                            );
-                          })}
-                        </div>
-
-                        {/* Place label */}
-                        <div className="font-mono text-[7px] text-fg-dim/30 mt-2 select-none">
-                          {
-                            ["T","","","B","","","M","","","K","","","1"][colIdx]
-                          }
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <p className="font-mono text-[9px] text-fg-dim/30 mt-4 leading-relaxed text-center">
-                  Click beads to move them toward or away from the bar.
-                  <br />
-                  Top bead = 5, bottom beads = 1 each.
-                </p>
-              </div>
-            )}
-
-            {/* ── CALCULATOR TAB ── */}
-            {activeTool === "calc" && (
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-mono text-[9px] text-fg-dim/40 tracking-wider">
-                    MECHANICAL CALCULATOR
-                  </span>
-                  <button
-                    onClick={calcClear}
-                    className="font-mono text-[10px] text-fg-dim hover:text-amber transition-colors cursor-pointer"
-                  >
-                    CLEAR
-                  </button>
-                </div>
-
-                {/* Display */}
-                <div className="bg-elevated border border-amber/10 p-4 mb-4">
-                  {calcOp && calcPrev !== null && (
-                    <div className="font-mono text-xs text-fg-dim/40 text-right mb-1 tabular-nums">
-                      {calcPrev.toLocaleString()} {calcOp}
-                    </div>
-                  )}
-                  <div className="font-mono text-3xl text-amber glow-amber text-right tabular-nums tracking-wide overflow-x-auto">
-                    {parseFloat(calcDisplay).toLocaleString(undefined, {
-                      maximumFractionDigits: 6,
-                    })}
-                  </div>
-                </div>
-
-                {/* Keypad */}
-                <div className="grid grid-cols-4 gap-[3px]">
-                  {[
-                    { label: "C", action: () => calcClear(), style: "text-red" },
-                    { label: "±", action: () => setCalcDisplay((d) => d.startsWith("-") ? d.slice(1) : "-" + d), style: "text-fg-dim" },
-                    { label: "%", action: () => setCalcDisplay((d) => (parseFloat(d) / 100).toString()), style: "text-fg-dim" },
-                    { label: "÷", action: () => calcOperator("÷"), style: "text-amber" },
-                    { label: "7", action: () => calcInput("7"), style: "" },
-                    { label: "8", action: () => calcInput("8"), style: "" },
-                    { label: "9", action: () => calcInput("9"), style: "" },
-                    { label: "×", action: () => calcOperator("×"), style: "text-amber" },
-                    { label: "4", action: () => calcInput("4"), style: "" },
-                    { label: "5", action: () => calcInput("5"), style: "" },
-                    { label: "6", action: () => calcInput("6"), style: "" },
-                    { label: "-", action: () => calcOperator("-"), style: "text-amber" },
-                    { label: "1", action: () => calcInput("1"), style: "" },
-                    { label: "2", action: () => calcInput("2"), style: "" },
-                    { label: "3", action: () => calcInput("3"), style: "" },
-                    { label: "+", action: () => calcOperator("+"), style: "text-amber" },
-                    { label: "0", action: () => calcInput("0"), span: true, style: "" },
-                    { label: ".", action: () => { if (!calcDisplay.includes(".")) setCalcDisplay((d) => d + "."); }, style: "" },
-                    { label: "=", action: () => calcEquals(), style: "bg-amber text-void hover:bg-amber-bright" },
-                  ].map((btn) => (
-                    <button
-                      key={btn.label}
-                      onClick={btn.action}
-                      className={`${
-                        btn.span ? "col-span-2" : ""
-                      } h-12 font-mono text-base rounded-[2px] cursor-pointer transition-all duration-100 active:scale-95 ${
-                        btn.style ||
-                        "text-fg-bright"
-                      } ${
-                        btn.style?.includes("bg-amber")
-                          ? ""
-                          : "bg-surface border border-amber/10 hover:border-amber/25 hover:bg-elevated"
-                      }`}
-                    >
-                      {btn.label}
-                    </button>
-                  ))}
-                </div>
-
-                <p className="font-mono text-[9px] text-fg-dim/30 mt-4 leading-relaxed text-center">
-                  For when the abacus isn&apos;t enough.
-                  <br />
-                  Still more analog than asking AI.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ── MOBILE TOOL PANEL ── */}
-      {sidebarOpen && (
-        <div className="fixed bottom-14 left-3 right-3 z-50 bg-surface border border-amber/20 p-4 shadow-[0_8px_40px_rgba(0,0,0,0.6)] max-h-[50vh] overflow-y-auto lg:hidden">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex gap-3">
-              <button
-                onClick={() => setActiveTool("abacus")}
-                className={`font-mono text-[10px] tracking-wider cursor-pointer ${activeTool === "abacus" ? "text-amber" : "text-fg-dim/40"}`}
-              >
-                SOROBAN
-              </button>
-              <button
-                onClick={() => setActiveTool("calc")}
-                className={`font-mono text-[10px] tracking-wider cursor-pointer ${activeTool === "calc" ? "text-amber" : "text-fg-dim/40"}`}
-              >
-                CALC
-              </button>
-            </div>
-            <button
-              onClick={() => setActiveTool(null)}
-              className="font-mono text-[10px] text-fg-dim/30 hover:text-red cursor-pointer"
-            >
-              CLOSE
-            </button>
-          </div>
-
-          {activeTool === "abacus" && (
-            <>
-              <div className="font-mono text-xl text-amber glow-amber text-center mb-2 tabular-nums">
-                {abacusValue.toLocaleString()}
-              </div>
-              <div className="overflow-x-auto">
-                <div className="flex justify-center gap-[3px] min-w-[340px]">
-                  {abacus.map((col, colIdx) => (
-                    <div key={colIdx} className="flex flex-col items-center w-[24px]">
-                      <div className="h-9 flex flex-col items-center justify-end">
-                        <button
-                          onClick={() => toggleHeaven(colIdx)}
-                          className={`w-[18px] h-[10px] rounded-[2px] cursor-pointer transition-all duration-200 border ${
-                            col.heaven
-                              ? "bg-amber border-amber/60 shadow-[0_0_8px_rgba(255,140,0,0.4)]"
-                              : "bg-amber/8 border-amber/15 -translate-y-3"
-                          }`}
-                        />
-                      </div>
-                      <div className="w-full h-[2px] bg-amber/40 my-[2px]" />
-                      <div className="flex flex-col items-center">
-                        {[0, 1, 2, 3].map((pos) => (
-                          <button
-                            key={pos}
-                            onClick={() => handleEarth(colIdx, pos)}
-                            className={`w-[18px] h-[10px] rounded-[2px] cursor-pointer transition-all duration-200 border ${
-                              pos < col.earth
-                                ? "bg-amber border-amber/60 shadow-[0_0_8px_rgba(255,140,0,0.4)]"
-                                : "bg-amber/8 border-amber/15"
-                            } ${pos === col.earth && col.earth > 0 && col.earth < 4 ? "mt-2" : "mt-[3px]"}`}
-                          />
-                        ))}
-                      </div>
-                      <div className="font-mono text-[6px] text-fg-dim/30 mt-1 select-none">
-                        {["T","","","B","","","M","","","K","","","1"][colIdx]}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <button onClick={clearAbacus} className="w-full mt-2 font-mono text-[10px] text-fg-dim hover:text-amber transition-colors cursor-pointer">
-                CLEAR
-              </button>
-            </>
-          )}
-
-          {activeTool === "calc" && (
-            <>
-              <div className="bg-elevated border border-amber/10 p-3 mb-3">
-                {calcOp && calcPrev !== null && (
-                  <div className="font-mono text-[10px] text-fg-dim/40 text-right tabular-nums">
-                    {calcPrev.toLocaleString()} {calcOp}
-                  </div>
-                )}
-                <div className="font-mono text-2xl text-amber glow-amber text-right tabular-nums">
-                  {parseFloat(calcDisplay).toLocaleString(undefined, { maximumFractionDigits: 6 })}
-                </div>
-              </div>
-              <div className="grid grid-cols-4 gap-[2px]">
-                {[
-                  { l: "C", a: () => calcClear(), s: "text-red" },
-                  { l: "±", a: () => setCalcDisplay((d) => d.startsWith("-") ? d.slice(1) : "-" + d), s: "text-fg-dim" },
-                  { l: "%", a: () => setCalcDisplay((d) => (parseFloat(d) / 100).toString()), s: "text-fg-dim" },
-                  { l: "÷", a: () => calcOperator("÷"), s: "text-amber" },
-                  { l: "7", a: () => calcInput("7") },
-                  { l: "8", a: () => calcInput("8") },
-                  { l: "9", a: () => calcInput("9") },
-                  { l: "×", a: () => calcOperator("×"), s: "text-amber" },
-                  { l: "4", a: () => calcInput("4") },
-                  { l: "5", a: () => calcInput("5") },
-                  { l: "6", a: () => calcInput("6") },
-                  { l: "-", a: () => calcOperator("-"), s: "text-amber" },
-                  { l: "1", a: () => calcInput("1") },
-                  { l: "2", a: () => calcInput("2") },
-                  { l: "3", a: () => calcInput("3") },
-                  { l: "+", a: () => calcOperator("+"), s: "text-amber" },
-                  { l: "0", a: () => calcInput("0"), span: true },
-                  { l: ".", a: () => { if (!calcDisplay.includes(".")) setCalcDisplay((d) => d + "."); } },
-                  { l: "=", a: () => calcEquals(), s: "bg-amber text-void" },
-                ].map((b) => (
-                  <button
-                    key={b.l}
-                    onClick={b.a}
-                    className={`${b.span ? "col-span-2" : ""} h-10 font-mono text-sm rounded-[2px] cursor-pointer transition-all active:scale-95 ${
-                      b.s?.includes("bg-amber") ? "bg-amber text-void" : `bg-surface border border-amber/10 ${b.s || "text-fg-bright"}`
-                    }`}
-                  >
-                    {b.l}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      )}
-
-      {/* ── TOOL TOGGLE BUTTONS ── */}
-      {phase === "quiz" && (
-        <div className="fixed bottom-4 right-3 sm:right-4 z-50 flex gap-2">
-          <button
-            onClick={() => setActiveTool(activeTool === "abacus" ? null : "abacus")}
-            className={`font-mono text-[11px] tracking-[0.1em] px-3 py-2 transition-all cursor-pointer ${
-              activeTool === "abacus"
-                ? "bg-elevated text-amber border border-amber/30"
-                : "bg-amber/90 text-void hover:bg-amber"
-            }`}
-          >
-            ABACUS
-          </button>
-          <button
-            onClick={() => setActiveTool(activeTool === "calc" ? null : "calc")}
-            className={`font-mono text-[11px] tracking-[0.1em] px-3 py-2 transition-all cursor-pointer ${
-              activeTool === "calc"
-                ? "bg-elevated text-amber border border-amber/30"
-                : "bg-amber/90 text-void hover:bg-amber"
-            }`}
-          >
-            CALC
-          </button>
-        </div>
-      )}
     </>
   );
 }
