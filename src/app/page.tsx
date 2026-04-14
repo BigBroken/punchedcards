@@ -102,29 +102,6 @@ const FEATURES = [
   },
 ];
 
-const TESTIMONIALS = [
-  {
-    quote:
-      "I used to wait for Claude to come back online. Now I just punch my code into cards. My debugging skills have never been sharper.",
-    name: "Sarah K.",
-    title: "Former Prompt Engineer",
-    id: "001",
-  },
-  {
-    quote:
-      "Bought these as a joke for our team\’s white elephant exchange. We use them unironically now.",
-    name: "Dev R.",
-    title: "Staff Engineer",
-    id: "002",
-  },
-  {
-    quote:
-      "Our sprint velocity INCREASED during the last outage. Turns out you think harder when you can\’t ask a chatbot.",
-    name: "Marcus T.",
-    title: "Engineering Manager",
-    id: "003",
-  },
-];
 
 const AI_STATUSES = [
   { text: "DEGRADED", color: "text-amber", dotClass: "bg-amber" },
@@ -654,45 +631,6 @@ export default function Home() {
               <div className="mt-4 font-mono text-[10px] text-fg-dim/40 tracking-wider">
                 PASSING SCORE: 7/10 &mdash; UNLIMITED RETAKES
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── TESTIMONIALS ────────────────────── */}
-        <section className="py-24 sm:py-32 px-6 border-t border-amber/10">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16 reveal">
-              <p className="font-mono text-xs tracking-[0.4em] text-amber mb-4">
-                &#9670; TRANSMISSIONS &#9670;
-              </p>
-              <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl text-fg-bright">
-                FIELD REPORTS
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {TESTIMONIALS.map((t, idx) => (
-                <div
-                  key={t.id}
-                  className="reveal bg-surface border border-green/5 p-6 hover:border-green/15 transition-all duration-300"
-                  style={{ transitionDelay: `${idx * 0.15}s` }}
-                >
-                  <div className="font-mono text-[10px] text-green/50 mb-4 tracking-wider">
-                    FIELD REPORT #{t.id}
-                  </div>
-                  <blockquote className="font-body text-sm text-fg leading-relaxed mb-6 italic">
-                    &ldquo;{t.quote}&rdquo;
-                  </blockquote>
-                  <div className="border-t border-green/10 pt-4">
-                    <div className="font-mono text-xs text-green glow-green">
-                      {t.name}
-                    </div>
-                    <div className="font-mono text-[10px] text-fg-dim mt-0.5">
-                      {t.title}
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
