@@ -159,18 +159,9 @@ body {
   animation-delay: 1.05s;
 }
 
-/* Scroll-triggered reveal */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition:
-    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Section reveal - pure CSS, no JS dependency */
+.reveal-section {
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* ── GLOW EFFECTS ── */

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 /* ═══════════════════════════════════════════
    DATA
@@ -169,34 +170,8 @@ export default function Home() {
       setStatusIdx((prev) => (prev + 1) % AI_STATUSES.length);
     }, 3500);
 
-    // Reveal elements already in viewport (handles back-navigation cache)
-    document.querySelectorAll(".reveal").forEach((el) => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight) {
-        el.classList.add("visible");
-      }
-    });
-
-    // Observe remaining elements below the fold
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
-    );
-
-    document.querySelectorAll(".reveal:not(.visible)").forEach((el) =>
-      observer.observe(el),
-    );
-
     return () => {
       clearInterval(interval);
-      observer.disconnect();
     };
   }, []);
 
@@ -211,25 +186,25 @@ export default function Home() {
       {/* ── NAVIGATION ────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-amber/10 bg-void/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          <a
-            href="#"
+          <Link
+            href="/"
             className="font-mono text-sm tracking-[0.3em] text-amber hover:text-amber-bright transition-colors"
           >
             PUNCHED CARDS&trade;
-          </a>
+          </Link>
           <div className="flex items-center gap-3 sm:gap-6 font-mono text-xs">
-            <a
+            <Link
               href="/guide"
               className="text-fg-dim hover:text-amber tracking-[0.1em] sm:tracking-[0.15em] transition-colors text-[10px] sm:text-xs"
             >
               GUIDE
-            </a>
-            <a
+            </Link>
+            <Link
               href="/certify"
               className="text-fg-dim hover:text-amber tracking-[0.1em] sm:tracking-[0.15em] transition-colors text-[10px] sm:text-xs"
             >
               CERTIFY
-            </a>
+            </Link>
             <div className="flex items-center gap-2">
               <span
                 className={`inline-block w-2 h-2 rounded-full pulse-dot ${status.dotClass}`}
@@ -302,12 +277,12 @@ export default function Home() {
             </div>
           </div>
 
-          <a
+          <Link
             href="/certify"
             className="font-mono text-xs sm:text-sm tracking-[0.2em] text-void bg-amber hover:bg-amber-bright px-8 py-3 transition-all duration-300 animate-fade-up delay-5 hover:shadow-[0_0_30px_rgba(255,140,0,0.3)]"
           >
             EARN YOUR SURVIVAL KIT &rarr;
-          </a>
+          </Link>
 
           {/* Hero Stats */}
           <div className="absolute bottom-8 sm:bottom-12 left-0 right-0 px-6">
@@ -344,7 +319,7 @@ export default function Home() {
         {/* ── FEATURES ────────────────────────── */}
         <section className="py-24 sm:py-32 px-6 border-t border-amber/10">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16 reveal">
+            <div className="text-center mb-16 reveal-section">
               <p className="font-mono text-xs tracking-[0.4em] text-amber mb-4">
                 &#9670; ADVANTAGES &#9670;
               </p>
@@ -357,7 +332,7 @@ export default function Home() {
               {FEATURES.map((feature, idx) => (
                 <div
                   key={feature.title}
-                  className="reveal group bg-surface border border-amber/5 p-6 hover:border-amber/20 transition-all duration-300 hover:bg-elevated"
+                  className="reveal-section group bg-surface border border-amber/5 p-6 hover:border-amber/20 transition-all duration-300 hover:bg-elevated"
                   style={{ transitionDelay: `${idx * 0.1}s` }}
                 >
                   <div className="icon-glow font-mono text-2xl text-amber mb-4 transition-all duration-300">
@@ -378,7 +353,7 @@ export default function Home() {
         {/* ── MERCH ────────────────────────────── */}
         <section className="py-24 sm:py-32 px-6 border-t border-amber/10">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16 reveal">
+            <div className="text-center mb-16 reveal-section">
               <p className="font-mono text-xs tracking-[0.4em] text-amber mb-4">
                 &#9670; GEAR &#9670;
               </p>
@@ -391,7 +366,7 @@ export default function Home() {
               {MERCH.map((item, idx) => (
                 <div
                   key={item.name}
-                  className="reveal bg-surface border border-amber/10 overflow-hidden hover:border-amber/20 transition-all duration-300 group"
+                  className="reveal-section bg-surface border border-amber/10 overflow-hidden hover:border-amber/20 transition-all duration-300 group"
                   style={{ transitionDelay: `${idx * 0.15}s` }}
                 >
                   {/* Visual */}
@@ -505,9 +480,9 @@ export default function Home() {
                       <span className="font-mono text-xl font-bold text-amber glow-amber">
                         {item.price}
                       </span>
-                      <a href="/waitlist" className="font-mono text-xs tracking-[0.15em] bg-amber text-void px-5 py-2.5 hover:bg-amber-bright transition-colors">
+                      <Link href="/waitlist" className="font-mono text-xs tracking-[0.15em] bg-amber text-void px-5 py-2.5 hover:bg-amber-bright transition-colors">
                         &gt; ADD_TO_CART
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -519,7 +494,7 @@ export default function Home() {
         {/* ── PRODUCTS ────────────────────────── */}
         <section id="products" className="py-24 sm:py-32 px-6">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16 reveal">
+            <div className="text-center mb-16 reveal-section">
               <p className="font-mono text-xs tracking-[0.4em] text-amber mb-4">
                 &#9670; INVENTORY &#9670;
               </p>
@@ -536,7 +511,7 @@ export default function Home() {
               {PRODUCTS.map((product, idx) => (
                 <div
                   key={product.name}
-                  className="product-card p-6 sm:p-8 reveal"
+                  className="product-card p-6 sm:p-8 reveal-section"
                   style={{ transitionDelay: `${idx * 0.15}s` }}
                 >
                   {/* Tag */}
@@ -583,9 +558,9 @@ export default function Home() {
                   </div>
 
                   {/* CTA */}
-                  <a href="/waitlist" className="block w-full font-mono text-xs tracking-[0.15em] bg-void text-amber py-3 hover:bg-elevated transition-colors text-center">
+                  <Link href="/waitlist" className="block w-full font-mono text-xs tracking-[0.15em] bg-void text-amber py-3 hover:bg-elevated transition-colors text-center">
                     &gt; ADD_TO_CART
-                  </a>
+                  </Link>
 
                   {/* Decorative punch holes */}
                   <div className="flex gap-[3px] mt-6 justify-center">
@@ -610,7 +585,7 @@ export default function Home() {
 
         {/* ── CERTIFICATION ────────────────────── */}
         <section className="py-24 sm:py-32 px-6 border-t border-amber/10">
-          <div className="max-w-3xl mx-auto text-center reveal">
+          <div className="max-w-3xl mx-auto text-center reveal-section">
             <div className="border-2 border-amber/20 p-8 sm:p-12 hover:border-amber/40 transition-colors duration-500">
               <p className="font-mono text-xs tracking-[0.4em] text-amber mb-4">
                 &#9670; PROVE IT &#9670;
@@ -623,12 +598,12 @@ export default function Home() {
                 Hollerith encoding, and punch card engineering. Add it to your
                 LinkedIn. Earn a free Starter Kit.
               </p>
-              <a
+              <Link
                 href="/certify"
                 className="inline-block font-mono text-sm tracking-[0.2em] text-void bg-amber hover:bg-amber-bright px-8 py-3 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,140,0,0.3)]"
               >
                 START EXAM &rarr;
-              </a>
+              </Link>
               <div className="mt-4 font-mono text-[10px] text-fg-dim/40 tracking-wider">
                 PASSING SCORE: 7/10 &mdash; UNLIMITED RETAKES
               </div>
@@ -638,7 +613,7 @@ export default function Home() {
 
         {/* ── CTA ─────────────────────────────── */}
         <section className="py-24 sm:py-32 px-6 text-center border-t border-amber/10">
-          <div className="max-w-3xl mx-auto reveal">
+          <div className="max-w-3xl mx-auto reveal-section">
             <p className="font-mono text-xs tracking-[0.4em] text-red mb-6 glow-red blink">
               &#9670; ALERT &#9670;
             </p>
