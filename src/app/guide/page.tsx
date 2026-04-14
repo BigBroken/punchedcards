@@ -164,8 +164,7 @@ export default function Guide() {
         <header className="mb-16">
           <p className="font-body text-lg text-fg-dim leading-relaxed mb-8">
             We assume no prior punch card experience, but a strong foundation
-            in linear algebra and a high tolerance for large numbers is
-            recommended.
+            in linear algebra and attention to detail recommended.
           </p>
 
           {/* Model specs */}
