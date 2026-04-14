@@ -192,6 +192,15 @@ export default function Home() {
       setStatusIdx((prev) => (prev + 1) % AI_STATUSES.length);
     }, 3500);
 
+    // Reveal elements already in viewport (handles back-navigation cache)
+    document.querySelectorAll(".reveal").forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.classList.add("visible");
+      }
+    });
+
+    // Observe remaining elements below the fold
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -204,7 +213,9 @@ export default function Home() {
       { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
     );
 
-    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+    document.querySelectorAll(".reveal:not(.visible)").forEach((el) =>
+      observer.observe(el),
+    );
 
     return () => {
       clearInterval(interval);
