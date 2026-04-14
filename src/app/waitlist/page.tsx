@@ -83,6 +83,7 @@ export default function Waitlist() {
   const [activeCard, setActiveCard] = useState(0);
   const [justPunched, setJustPunched] = useState<number | null>(null);
   const [mistakeMsg, setMistakeMsg] = useState(false);
+  const [cardShake, setCardShake] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const currentCardPunched = emailCards[activeCard];
@@ -140,8 +141,10 @@ export default function Waitlist() {
 
   function punchHole(idx: number) {
     if (currentCardPunched.has(idx)) {
-      // Already punched — show mistake message
+      // Already punched — shake card + show mistake message
+      setCardShake(true);
       setMistakeMsg(true);
+      setTimeout(() => setCardShake(false), 500);
       setTimeout(() => setMistakeMsg(false), 3000);
       return;
     }
@@ -283,11 +286,12 @@ export default function Waitlist() {
                     </summary>
                     <div className="mt-3 bg-surface border border-amber/10 p-4 sm:p-5 space-y-4">
                       <p className="font-body text-sm text-fg-dim leading-relaxed">
-                        Each column encodes one character. Punch the right
-                        combination of a <strong>zone row</strong> (12, 11, or
-                        0) and a <strong>digit row</strong> (1&ndash;9) to form
-                        a letter. Punches are permanent &mdash; just like real
-                        cardboard.
+                        Each column stores one character using{" "}
+                        <strong>Hollerith encoding</strong> &mdash; a precursor
+                        to EBCDIC (not ASCII). The 12 rows per column are
+                        binary: punched&nbsp;=&nbsp;1, unpunched&nbsp;=&nbsp;0,
+                        giving 12 bits per character. A specific pattern of
+                        punched holes maps to each letter, digit, or symbol.
                       </p>
 
                       <div>
@@ -437,13 +441,13 @@ export default function Waitlist() {
 
                   {/* Punch card */}
                   <div
-                    className="relative w-full bg-cream p-3 sm:p-4 shadow-[0_10px_40px_rgba(255,140,0,0.06)] overflow-x-auto"
+                    className={`relative w-full bg-cream p-3 sm:p-4 shadow-[0_10px_40px_rgba(255,140,0,0.06)] overflow-x-auto ${cardShake ? "animate-card-shake" : ""}`}
                     style={{
                       clipPath:
                         "polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px)",
                     }}
                   >
-                    <div className="text-[7px] sm:text-[8px] font-mono text-cream-dark tracking-[0.15em] mb-2 flex justify-between">
+                    <div className="text-[7px] sm:text-[8px] font-mono text-cream-dark/80 tracking-[0.15em] mb-2 flex justify-between">
                       <span>
                         EMAIL CARD {activeCard + 1} OF{" "}
                         {emailCards.length}
@@ -464,7 +468,7 @@ export default function Waitlist() {
                           {Array.from({ length: EMAIL_COLS }, (_, c) => (
                             <div
                               key={c}
-                              className="text-[4px] sm:text-[5px] font-mono text-center text-cream-dark/25"
+                              className="text-[5px] sm:text-[6px] font-mono text-center text-cream-dark/50"
                             >
                               {activeCard * EMAIL_COLS + c + 1}
                             </div>
@@ -478,7 +482,7 @@ export default function Waitlist() {
                           {ROW_LABELS.slice(0, 3).map((label, r) => (
                             <div
                               key={r}
-                              className="text-[5px] sm:text-[6px] font-mono text-cream-dark/30 text-right pr-1.5 leading-none flex items-center justify-end"
+                              className="text-[6px] sm:text-[7px] font-mono text-cream-dark/60 text-right pr-1.5 leading-none flex items-center justify-end"
                               style={{ height: "10px" }}
                             >
                               {label}
@@ -503,12 +507,16 @@ export default function Waitlist() {
                                 <button
                                   key={i}
                                   onClick={() => punchHole(absIdx)}
-                                  className={`h-[10px] rounded-[1px] cursor-pointer transition-all duration-150 ${
-                                    isPunched
-                                      ? "punch-hole-active"
-                                      : "bg-cream-dark/10 hover:bg-cream-dark/18"
-                                  } ${justPunched === col && isPunched ? "animate-punch" : ""}`}
-                                />
+                                  className={`h-[10px] flex items-center justify-center cursor-pointer transition-all duration-150 ${justPunched === col && isPunched ? "animate-punch" : ""}`}
+                                >
+                                  <span
+                                    className={`block w-[60%] h-[7px] rounded-[0.5px] ${
+                                      isPunched
+                                        ? "punch-hole-active"
+                                        : "bg-cream-dark/12 hover:bg-cream-dark/22"
+                                    }`}
+                                  />
+                                </button>
                               );
                             },
                           )}
@@ -527,7 +535,7 @@ export default function Waitlist() {
                           {ROW_LABELS.slice(3).map((label, r) => (
                             <div
                               key={r}
-                              className="text-[5px] sm:text-[6px] font-mono text-cream-dark/30 text-right pr-1.5 leading-none flex items-center justify-end"
+                              className="text-[6px] sm:text-[7px] font-mono text-cream-dark/60 text-right pr-1.5 leading-none flex items-center justify-end"
                               style={{ height: "10px" }}
                             >
                               {label}
@@ -552,12 +560,16 @@ export default function Waitlist() {
                                 <button
                                   key={i}
                                   onClick={() => punchHole(absIdx)}
-                                  className={`h-[10px] rounded-[1px] cursor-pointer transition-all duration-150 ${
-                                    isPunched
-                                      ? "punch-hole-active"
-                                      : "bg-cream-dark/10 hover:bg-cream-dark/18"
-                                  } ${justPunched === col && isPunched ? "animate-punch" : ""}`}
-                                />
+                                  className={`h-[10px] flex items-center justify-center cursor-pointer transition-all duration-150 ${justPunched === col && isPunched ? "animate-punch" : ""}`}
+                                >
+                                  <span
+                                    className={`block w-[60%] h-[7px] rounded-[0.5px] ${
+                                      isPunched
+                                        ? "punch-hole-active"
+                                        : "bg-cream-dark/12 hover:bg-cream-dark/22"
+                                    }`}
+                                  />
+                                </button>
                               );
                             },
                           )}
@@ -576,12 +588,12 @@ export default function Waitlist() {
                           {activeDecoded.map((d, c) => (
                             <div
                               key={c}
-                              className={`text-[6px] sm:text-[7px] font-mono text-center ${
+                              className={`text-[7px] sm:text-[8px] font-mono text-center font-semibold ${
                                 !d.hasHoles
-                                  ? "text-cream-dark/15"
+                                  ? "text-cream-dark/20"
                                   : d.char === "?"
-                                    ? "text-red/60"
-                                    : "text-void/50"
+                                    ? "text-red/80"
+                                    : "text-void/70"
                               }`}
                             >
                               {d.hasHoles ? d.char : "\·"}
@@ -591,7 +603,7 @@ export default function Waitlist() {
                       </div>
                     </div>
 
-                    <div className="mt-2 text-[6px] sm:text-[7px] font-mono text-cream-dark/30 text-center">
+                    <div className="mt-2 text-[7px] sm:text-[8px] font-mono text-cream-dark/50 text-center">
                       EACH COLUMN = ONE CHARACTER &mdash; ZONE PUNCH (12, 11,
                       0) + DIGIT PUNCH (1&ndash;9) &mdash; PUNCHES ARE PERMANENT
                     </div>
@@ -600,7 +612,7 @@ export default function Waitlist() {
                   {/* Mistake message */}
                   <div className={`mt-2 text-center transition-opacity duration-300 ${mistakeMsg ? "opacity-100" : "opacity-0"}`}>
                     <span className="font-mono text-[10px] text-red/70">
-                      Can&apos;t unpunch cardboard. Trash this card and start
+                      Can&apos;t unpunch card stock. Trash this card and start
                       fresh.
                     </span>
                   </div>

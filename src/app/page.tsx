@@ -14,7 +14,7 @@ const TICKER_ITEMS = [
   "Copilot autocomplete now suggesting \‘have you tried punch cards?\’ to all users",
   "NASDAQ AI index drops 12% \— punch card futures hit all-time high",
   "Junior dev writes function without AI for first time \— promoted on the spot",
-  "Fortune 500 CTO spotted at office supply store buying cardboard in bulk",
+  "Fortune 500 CTO spotted at office supply store buying card stock in bulk",
 ];
 
 const PRODUCTS = [
@@ -30,7 +30,7 @@ const PRODUCTS = [
       "50 blank 80-column cards",
       "Quick-start field guide",
       "Punch card sticker sheet",
-      "\“I SURVIVED AN OUTAGE\” badge",
+      "\"I SURVIVED AN OUTAGE\" badge",
     ],
   },
   {
@@ -78,7 +78,7 @@ const FEATURES = [
   {
     icon: "\∅",
     title: "ZERO DEPENDENCIES",
-    desc: "No npm install. No node_modules. No breaking changes at 2 AM. Just cardboard.",
+    desc: "No npm install. No node_modules. No breaking changes at 2 AM. Just card stock.",
   },
   {
     icon: "\■",
@@ -88,7 +88,7 @@ const FEATURES = [
   {
     icon: "\★",
     title: "R\ÉSUM\É BUILDER",
-    desc: "Nothing says \“10x engineer\” like punch card proficiency on your LinkedIn.",
+    desc: "Nothing says \"10x engineer\" like punch card proficiency on your LinkedIn.",
   },
   {
     icon: "\◎",
@@ -137,7 +137,7 @@ const AI_STATUSES = [
 
 const MERCH = [
   {
-    name: "\“1B+ Token Club\” Mug",
+    name: "\"1B+ Token Club\" Mug",
     price: "$24.99",
     tag: "LIMITED EDITION",
     description:
@@ -149,19 +149,19 @@ const MERCH = [
     ],
   },
   {
-    name: "\“I Wrote This Without AI\” Tee",
-    price: "$34.99",
-    tag: "CONVERSATION STARTER",
+    name: '"Saving Humanity One Hole at a Time" Underwear',
+    price: "$24.99",
+    tag: "UNDER THE STACK",
     description:
-      "Let everyone know you still write code the old-fashioned way. Warning: may attract mass skepticism.",
+      "For the developer who commits from the bottom up. Wear your mission where it counts.",
     features: [
-      "100% organic cotton",
-      "Unisex relaxed fit",
-      "Comes pre-debugged",
+      "95% modal, 5% audacity",
+      "Available in thong & bikini cut",
+      "Machine washable, unlike your git history",
     ],
   },
   {
-    name: "\“CTRL+Z Won\’t Save You\” Stickers",
+    name: "\"CTRL+Z Won\’t Save You\" Stickers",
     price: "$9.99",
     tag: "12 STICKERS",
     description:
@@ -494,22 +494,28 @@ export default function Home() {
                       </div>
                     )}
 
-                    {/* Tee */}
+                    {/* Underwear */}
                     {idx === 1 && (
-                      <div
-                        className="w-32 h-36 bg-fg-bright/90 relative"
-                        style={{
-                          clipPath:
-                            "polygon(30% 0%, 70% 0%, 70% 10%, 100% 10%, 85% 28%, 85% 100%, 15% 100%, 15% 28%, 0% 10%, 30% 10%)",
-                        }}
-                      >
-                        <div className="absolute inset-0 flex items-center justify-center pt-6">
-                          <div className="text-void font-mono text-[7px] text-center tracking-wider leading-relaxed font-bold">
-                            I WROTE
-                            <br />
-                            THIS
-                            <br />
-                            WITHOUT AI
+                      <div className="w-36 h-32 relative flex items-center justify-center">
+                        <div
+                          className="w-32 h-24 bg-fg-bright/90 relative"
+                          style={{
+                            clipPath:
+                              "polygon(8% 0%, 92% 0%, 100% 30%, 75% 70%, 55% 100%, 50% 100%, 45% 100%, 25% 70%, 0% 30%)",
+                          }}
+                        >
+                          {/* Waistband */}
+                          <div className="absolute top-0 left-0 right-0 h-[10px] bg-amber/80" />
+                          <div className="absolute inset-0 flex items-center justify-center pt-2">
+                            <div className="text-void font-mono text-[5px] text-center tracking-wider leading-relaxed font-bold">
+                              SAVING
+                              <br />
+                              HUMANITY
+                              <br />
+                              ONE HOLE
+                              <br />
+                              AT A TIME
+                            </div>
                           </div>
                         </div>
                       </div>

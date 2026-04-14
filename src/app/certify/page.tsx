@@ -120,8 +120,6 @@ const QUESTIONS = [
   },
 ];
 
-const MATH_QUESTIONS = new Set([1, 3, 4, 5, 6, 8, 9]);
-
 /* ═══════════════════════════════════════════
    HELPERS
    ═══════════════════════════════════════════ */
@@ -182,9 +180,10 @@ export default function Certify() {
     setAbacus(Array.from({ length: 13 }, () => ({ heaven: false, earth: 0 })));
   }
 
+  const [showAbacus, setShowAbacus] = useState(false);
+
   /* ── Computed ── */
   const q = QUESTIONS[currentQ];
-  const isMathQ = MATH_QUESTIONS.has(currentQ);
   const passed = score >= 7;
   const credentialId = generateCredentialId(name);
   const today = new Date().toLocaleDateString("en-US", {
@@ -248,11 +247,7 @@ export default function Certify() {
         </nav>
 
         <main className="flex-1 flex items-center justify-center px-6 py-12">
-          <div
-            className={`w-full transition-[max-width] duration-500 ease-in-out ${
-              phase === "quiz" && isMathQ ? "max-w-6xl" : "max-w-2xl"
-            }`}
-          >
+          <div className="w-full max-w-2xl">
             {/* ── INTRO ── */}
             {phase === "intro" && (
               <div className="text-center animate-fade-up delay-1">
@@ -325,212 +320,238 @@ export default function Certify() {
                   />
                 </div>
 
-                {/* Two-column grid for math questions, single column otherwise */}
-                <div
-                  className={
-                    isMathQ
-                      ? "lg:grid lg:grid-cols-[1fr_340px] lg:gap-8 items-start"
-                      : ""
-                  }
-                >
-                  {/* Question */}
-                  <h2
-                    className={`font-body text-lg sm:text-xl text-fg-bright leading-relaxed mb-8 ${
-                      isMathQ ? "lg:col-start-1" : ""
-                    }`}
-                  >
-                    {q.question}
-                  </h2>
+                {/* Question */}
+                <h2 className="font-body text-lg sm:text-xl text-fg-bright leading-relaxed mb-8">
+                  {q.question}
+                </h2>
 
-                  {/* ── INLINE TOOLS (math questions only) ── */}
-                  {isMathQ && (
-                    <div className="mb-8 lg:mb-0 lg:col-start-2 lg:row-start-1 lg:row-span-10">
-                      <div className="lg:sticky lg:top-20">
-                        <div className="border border-amber/10 bg-surface/80 backdrop-blur-sm p-4">
-                            <div className="flex items-center justify-between mb-4">
-                              <span className="font-mono text-[9px] text-fg-dim/40 tracking-wider">
-                                13-COLUMN SOROBAN
-                              </span>
-                              <button
-                                onClick={clearAbacus}
-                                className="font-mono text-[10px] text-fg-dim hover:text-amber transition-colors cursor-pointer"
-                              >
-                                CLEAR
-                              </button>
-                            </div>
+                {/* Options */}
+                <div className="space-y-3 mb-8">
+                  {q.options.map((option, idx) => {
+                    let border = "border-amber/10 hover:border-amber/30";
+                    let bg = "bg-surface";
+                    let text = "text-fg";
 
-                            {/* Value display */}
-                            <div className="font-mono text-2xl text-amber glow-amber text-center mb-4 tabular-nums tracking-wide">
-                              {abacusValue.toLocaleString()}
-                            </div>
-
-                            {/* Abacus frame */}
-                            <div className="bg-elevated border border-amber/10 p-3 rounded-sm">
-                              <div className="flex justify-center gap-[4px]">
-                                {abacus.map((col, colIdx) => (
-                                  <div
-                                    key={colIdx}
-                                    className="flex flex-col items-center w-[20px]"
-                                  >
-                                    {/* Heaven section */}
-                                    <div className="h-12 flex flex-col items-center justify-end relative">
-                                      <div className="absolute inset-x-1/2 top-0 bottom-0 w-[1px] bg-amber/8 -translate-x-1/2" />
-                                      <button
-                                        onClick={() => toggleHeaven(colIdx)}
-                                        className={`relative z-10 w-[18px] h-[12px] rounded-[3px] cursor-pointer transition-all duration-200 border ${
-                                          col.heaven
-                                            ? "bg-amber border-amber/60 shadow-[0_0_10px_rgba(255,140,0,0.5)] translate-y-0"
-                                            : "bg-amber/8 border-amber/15 -translate-y-5"
-                                        }`}
-                                      />
-                                    </div>
-
-                                    {/* Bar */}
-                                    <div className="w-full h-[2px] bg-amber/40 my-[3px]" />
-
-                                    {/* Earth section */}
-                                    <div className="flex flex-col items-center relative">
-                                      <div className="absolute inset-x-1/2 top-0 bottom-0 w-[1px] bg-amber/8 -translate-x-1/2" />
-                                      {[0, 1, 2, 3].map((pos) => {
-                                        const active = pos < col.earth;
-                                        const isGap =
-                                          pos === col.earth &&
-                                          col.earth > 0 &&
-                                          col.earth < 4;
-                                        return (
-                                          <button
-                                            key={pos}
-                                            onClick={() =>
-                                              handleEarth(colIdx, pos)
-                                            }
-                                            className={`relative z-10 w-[18px] h-[12px] rounded-[3px] cursor-pointer transition-all duration-200 border ${
-                                              active
-                                                ? "bg-amber border-amber/60 shadow-[0_0_10px_rgba(255,140,0,0.5)]"
-                                                : "bg-amber/8 border-amber/15"
-                                            } ${isGap ? "mt-4" : "mt-[4px]"}`}
-                                          />
-                                        );
-                                      })}
-                                    </div>
-
-                                    {/* Place label */}
-                                    <div className="font-mono text-[7px] text-fg-dim/30 mt-2 select-none">
-                                      {
-                                        [
-                                          "T","","","B","","","M","","","K","","","1",
-                                        ][colIdx]
-                                      }
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            <p className="font-mono text-[9px] text-fg-dim/30 mt-4 leading-relaxed text-center">
-                              Click beads to move them toward or away from the
-                              bar.
-                              <br />
-                              Top bead = 5, bottom beads = 1 each.
-                            </p>
-                          </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Options */}
-                  <div
-                    className={`space-y-3 mb-8 ${
-                      isMathQ ? "lg:col-start-1" : ""
-                    }`}
-                  >
-                    {q.options.map((option, idx) => {
-                      let border = "border-amber/10 hover:border-amber/30";
-                      let bg = "bg-surface";
-                      let text = "text-fg";
-
-                      if (confirmed) {
-                        if (idx === q.correct) {
-                          border = "border-green/60";
-                          bg = "bg-green/5";
-                          text = "text-green";
-                        } else if (idx === selected && idx !== q.correct) {
-                          border = "border-red/60";
-                          bg = "bg-red/5";
-                          text = "text-red";
-                        } else {
-                          border = "border-amber/5";
-                          text = "text-fg-dim";
-                        }
-                      } else if (idx === selected) {
-                        border = "border-amber";
-                        bg = "bg-amber/5";
-                        text = "text-amber";
+                    if (confirmed) {
+                      if (idx === q.correct) {
+                        border = "border-green/60";
+                        bg = "bg-green/5";
+                        text = "text-green";
+                      } else if (idx === selected && idx !== q.correct) {
+                        border = "border-red/60";
+                        bg = "bg-red/5";
+                        text = "text-red";
+                      } else {
+                        border = "border-amber/5";
+                        text = "text-fg-dim";
                       }
+                    } else if (idx === selected) {
+                      border = "border-amber";
+                      bg = "bg-amber/5";
+                      text = "text-amber";
+                    }
 
-                      return (
-                        <button
-                          key={idx}
-                          onClick={() => !confirmed && setSelected(idx)}
-                          disabled={confirmed}
-                          className={`w-full text-left px-5 py-4 border ${border} ${bg} ${text} font-mono text-sm transition-all duration-200 cursor-pointer disabled:cursor-default flex items-start gap-3`}
-                        >
-                          <span className="text-fg-dim/40 shrink-0">
-                            {String.fromCharCode(65 + idx)})
-                          </span>
-                          {option}
-                        </button>
-                      );
-                    })}
-                  </div>
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => !confirmed && setSelected(idx)}
+                        disabled={confirmed}
+                        className={`w-full text-left px-5 py-4 border ${border} ${bg} ${text} font-mono text-sm transition-all duration-200 cursor-pointer disabled:cursor-default flex items-start gap-3`}
+                      >
+                        <span className="text-fg-dim/40 shrink-0">
+                          {String.fromCharCode(65 + idx)})
+                        </span>
+                        {option}
+                      </button>
+                    );
+                  })}
+                </div>
 
-                  {/* Explanation */}
-                  {confirmed && (
+                {/* Explanation */}
+                {confirmed && (
+                  <div
+                    className={`mb-8 p-4 border-l-2 ${
+                      selected === q.correct
+                        ? "border-green bg-green/5"
+                        : "border-red bg-red/5"
+                    }`}
+                  >
                     <div
-                      className={`mb-8 p-4 border-l-2 ${
-                        isMathQ ? "lg:col-start-1" : ""
-                      } ${
-                        selected === q.correct
-                          ? "border-green bg-green/5"
-                          : "border-red bg-red/5"
+                      className={`font-mono text-xs tracking-wider mb-2 ${
+                        selected === q.correct ? "text-green" : "text-red"
                       }`}
                     >
-                      <div
-                        className={`font-mono text-xs tracking-wider mb-2 ${
-                          selected === q.correct ? "text-green" : "text-red"
-                        }`}
-                      >
-                        {selected === q.correct
-                          ? "\u2713 CORRECT"
-                          : "\u2717 INCORRECT"}
-                      </div>
-                      <p className="font-body text-sm text-fg-dim leading-relaxed">
-                        {q.explanation}
-                      </p>
+                      {selected === q.correct
+                        ? "\u2713 CORRECT"
+                        : "\u2717 INCORRECT"}
                     </div>
+                    <p className="font-body text-sm text-fg-dim leading-relaxed">
+                      {q.explanation}
+                    </p>
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div className="flex items-center gap-4">
+                  {!confirmed ? (
+                    <button
+                      onClick={handleConfirm}
+                      disabled={selected === null}
+                      className="font-mono text-sm tracking-[0.15em] bg-amber text-void px-8 py-3 hover:bg-amber-bright transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      CONFIRM &rarr;
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleNext}
+                      className="font-mono text-sm tracking-[0.15em] bg-amber text-void px-8 py-3 hover:bg-amber-bright transition-colors cursor-pointer"
+                    >
+                      {currentQ + 1 >= QUESTIONS.length
+                        ? "VIEW RESULTS \u2192"
+                        : "NEXT QUESTION \u2192"}
+                    </button>
                   )}
 
-                  {/* Actions */}
-                  <div className={isMathQ ? "lg:col-start-1" : ""}>
-                    {!confirmed ? (
-                      <button
-                        onClick={handleConfirm}
-                        disabled={selected === null}
-                        className="font-mono text-sm tracking-[0.15em] bg-amber text-void px-8 py-3 hover:bg-amber-bright transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                      >
-                        CONFIRM &rarr;
-                      </button>
-                    ) : (
-                      <button
-                        onClick={handleNext}
-                        className="font-mono text-sm tracking-[0.15em] bg-amber text-void px-8 py-3 hover:bg-amber-bright transition-colors cursor-pointer"
-                      >
-                        {currentQ + 1 >= QUESTIONS.length
-                          ? "VIEW RESULTS \u2192"
-                          : "NEXT QUESTION \u2192"}
-                      </button>
-                    )}
-                  </div>
+                  <button
+                    onClick={() => setShowAbacus((s) => !s)}
+                    className={`font-mono text-[11px] tracking-wider px-4 py-3 transition-all cursor-pointer border ${
+                      showAbacus
+                        ? "border-amber/40 text-amber bg-amber/5"
+                        : "border-amber/15 text-fg-dim hover:text-amber hover:border-amber/30"
+                    }`}
+                  >
+                    {showAbacus ? "HIDE ABACUS" : "NEED HELP?"}
+                  </button>
                 </div>
+
+                {/* ── SOROBAN ABACUS (toggled) ── */}
+                {showAbacus && (
+                  <div className="mt-8 overflow-hidden">
+                    {/* Wooden frame */}
+                    <div
+                      className="rounded-md p-1"
+                      style={{
+                        background: "linear-gradient(180deg, #5c3d1e 0%, #4a3018 50%, #3d2713 100%)",
+                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 16px rgba(0,0,0,0.4)",
+                      }}
+                    >
+                      {/* Inner frame */}
+                      <div
+                        className="rounded-sm p-3 relative"
+                        style={{
+                          background: "linear-gradient(180deg, #4a3018 0%, #3d2713 100%)",
+                          boxShadow: "inset 0 2px 6px rgba(0,0,0,0.4)",
+                        }}
+                      >
+                        {/* Value display */}
+                        <div className="font-mono text-xl text-amber glow-amber text-center mb-3 tabular-nums tracking-wide">
+                          {abacusValue.toLocaleString()}
+                        </div>
+
+                        {/* Bead area */}
+                        <div className="flex justify-center gap-[3px]">
+                          {abacus.map((col, colIdx) => (
+                            <div
+                              key={colIdx}
+                              className="flex flex-col items-center w-[22px] relative"
+                            >
+                              {/* Rod */}
+                              <div
+                                className="absolute top-0 bottom-0 w-[2px] rounded-full"
+                                style={{
+                                  left: "50%",
+                                  transform: "translateX(-50%)",
+                                  background: "linear-gradient(90deg, #8B7355 0%, #a08060 50%, #8B7355 100%)",
+                                  boxShadow: "0 0 2px rgba(0,0,0,0.3)",
+                                }}
+                              />
+
+                              {/* Heaven bead (top, value = 5) */}
+                              <div className="h-14 flex flex-col items-center justify-end relative z-10">
+                                <button
+                                  onClick={() => toggleHeaven(colIdx)}
+                                  className="cursor-pointer transition-all duration-200"
+                                  style={{
+                                    width: "20px",
+                                    height: "10px",
+                                    borderRadius: "50%",
+                                    background: col.heaven
+                                      ? "radial-gradient(ellipse at 40% 35%, #e8a020 0%, #c07018 60%, #8B5E14 100%)"
+                                      : "radial-gradient(ellipse at 40% 35%, #d49025 0%, #a06815 60%, #7a4e10 100%)",
+                                    boxShadow: col.heaven
+                                      ? "0 2px 4px rgba(0,0,0,0.4), 0 0 8px rgba(255,160,32,0.3), inset 0 -1px 2px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.2)"
+                                      : "0 2px 4px rgba(0,0,0,0.4), inset 0 -1px 2px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.15)",
+                                    transform: col.heaven ? "translateY(0)" : "translateY(-20px)",
+                                    border: "1px solid rgba(0,0,0,0.2)",
+                                  }}
+                                />
+                              </div>
+
+                              {/* Divider bar */}
+                              <div
+                                className="w-full my-[2px] relative z-10"
+                                style={{
+                                  height: "3px",
+                                  background: "linear-gradient(180deg, #6b4c28 0%, #4a3018 50%, #6b4c28 100%)",
+                                  boxShadow: "0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)",
+                                }}
+                              />
+
+                              {/* Earth beads (bottom, value = 1 each) */}
+                              <div className="flex flex-col items-center relative z-10">
+                                {[0, 1, 2, 3].map((pos) => {
+                                  const active = pos < col.earth;
+                                  const isGap =
+                                    pos === col.earth &&
+                                    col.earth > 0 &&
+                                    col.earth < 4;
+                                  return (
+                                    <button
+                                      key={pos}
+                                      onClick={() => handleEarth(colIdx, pos)}
+                                      className="cursor-pointer transition-all duration-200"
+                                      style={{
+                                        width: "20px",
+                                        height: "10px",
+                                        borderRadius: "50%",
+                                        marginTop: isGap ? "14px" : "3px",
+                                        background: active
+                                          ? "radial-gradient(ellipse at 40% 35%, #e8a020 0%, #c07018 60%, #8B5E14 100%)"
+                                          : "radial-gradient(ellipse at 40% 35%, #d49025 0%, #a06815 60%, #7a4e10 100%)",
+                                        boxShadow: active
+                                          ? "0 2px 4px rgba(0,0,0,0.4), 0 0 8px rgba(255,160,32,0.3), inset 0 -1px 2px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.2)"
+                                          : "0 2px 4px rgba(0,0,0,0.4), inset 0 -1px 2px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.15)",
+                                        border: "1px solid rgba(0,0,0,0.2)",
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </div>
+
+                              {/* Place label */}
+                              <div className="font-mono text-[7px] text-amber/30 mt-2 select-none">
+                                {["T","","","B","","","M","","","K","","","1"][colIdx]}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Controls */}
+                        <div className="flex items-center justify-between mt-3">
+                          <span className="font-mono text-[8px] text-amber/30 tracking-wider select-none">
+                            Top = 5 &middot; Bottom = 1
+                          </span>
+                          <button
+                            onClick={clearAbacus}
+                            className="font-mono text-[9px] text-amber/40 hover:text-amber transition-colors cursor-pointer"
+                          >
+                            CLEAR
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

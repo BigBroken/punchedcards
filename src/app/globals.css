@@ -201,11 +201,28 @@ body {
 
 /* ── PUNCH CARD ── */
 
+@keyframes card-shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-4px) rotate(-0.3deg); }
+  35% { transform: translateX(3px) rotate(0.2deg); }
+  55% { transform: translateX(-2px); }
+  75% { transform: translateX(2px) rotate(-0.1deg); }
+  90% { transform: translateX(-1px); }
+}
+
+.animate-card-shake {
+  animation: card-shake 0.4s ease-in-out;
+}
+
 .punch-hole-active {
-  background: var(--color-void) !important;
+  background: #0a0a0c !important;
+  border-radius: 0.5px;
   box-shadow:
-    0 0 3px rgba(255, 140, 0, 0.4),
-    inset 0 0 2px rgba(255, 140, 0, 0.2);
+    inset 0 1px 3px rgba(0, 0, 0, 1),
+    inset 0 -0.5px 1px rgba(0, 0, 0, 0.6),
+    inset 1px 0 2px rgba(0, 0, 0, 0.5),
+    inset -1px 0 2px rgba(0, 0, 0, 0.5),
+    0 0.5px 0 rgba(255, 255, 255, 0.06);
 }
 
 .product-card {
