@@ -264,10 +264,12 @@ export default function Certify() {
                   density, and punch card engineering. Real calculations
                   required. No hand-holding.
                 </p>
-                <p className="font-body text-sm text-amber max-w-sm mx-auto mb-3 leading-relaxed italic glow-amber">
-                  Employers are actively seeking candidates with this
-                  in-demand certification. Stand out from the crowd.
-                </p>
+                <div className="max-w-md mx-auto mb-5 px-5 py-4 border-2 border-amber bg-amber/10 animate-pulse-slow" style={{ boxShadow: '0 0 30px rgba(255,140,0,0.3), 0 0 60px rgba(255,140,0,0.15), inset 0 0 30px rgba(255,140,0,0.05)' }}>
+                  <p className="font-body text-base text-amber font-semibold leading-relaxed italic text-center" style={{ textShadow: '0 0 20px rgba(255,140,0,0.8), 0 0 40px rgba(255,140,0,0.4)' }}>
+                    Employers are actively seeking candidates with this
+                    in-demand certification. Stand out from the crowd.
+                  </p>
+                </div>
                 <p className="font-mono text-xs text-amber mb-10">
                   PASSING SCORE: 7/10
                 </p>
