@@ -375,6 +375,147 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ── MERCH ────────────────────────────── */}
+        <section className="py-24 sm:py-32 px-6 border-t border-amber/10">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16 reveal">
+              <p className="font-mono text-xs tracking-[0.4em] text-amber mb-4">
+                &#9670; GEAR &#9670;
+              </p>
+              <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl text-fg-bright">
+                ANALOG MERCH
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {MERCH.map((item, idx) => (
+                <div
+                  key={item.name}
+                  className="reveal bg-surface border border-amber/10 overflow-hidden hover:border-amber/20 transition-all duration-300 group"
+                  style={{ transitionDelay: `${idx * 0.15}s` }}
+                >
+                  {/* Visual */}
+                  <div className="bg-elevated flex items-center justify-center p-8 sm:p-10 min-h-[220px] relative overflow-hidden">
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "radial-gradient(circle at center, rgba(255,140,0,0.06) 0%, transparent 70%)",
+                      }}
+                    />
+
+                    {/* Mug */}
+                    {idx === 0 && (
+                      <div className="relative">
+                        <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex gap-2">
+                          <div className="w-0.5 h-5 bg-amber/30 rounded-full steam-1" />
+                          <div className="w-0.5 h-4 bg-amber/20 rounded-full steam-2" />
+                          <div className="w-0.5 h-5 bg-amber/25 rounded-full steam-3" />
+                        </div>
+                        <div className="relative">
+                          <div className="w-28 h-32 bg-gradient-to-b from-amber to-amber-dim rounded-b-xl rounded-t-md flex flex-col items-center justify-center shadow-[0_0_30px_rgba(255,140,0,0.15)]">
+                            <div className="text-void font-heading text-3xl font-bold leading-none">
+                              1B+
+                            </div>
+                            <div className="text-void/60 font-mono text-[7px] tracking-[0.2em] mt-0.5">
+                              TOKEN CLUB
+                            </div>
+                          </div>
+                          <div className="absolute right-[-12px] top-[16%] w-4 h-[48%] border-[3px] border-amber rounded-r-xl" />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Underwear */}
+                    {idx === 1 && (
+                      <div className="w-36 h-32 relative flex items-center justify-center">
+                        <div
+                          className="w-32 h-24 bg-fg-bright/90 relative"
+                          style={{
+                            clipPath:
+                              "polygon(8% 0%, 92% 0%, 100% 30%, 75% 70%, 55% 100%, 50% 100%, 45% 100%, 25% 70%, 0% 30%)",
+                          }}
+                        >
+                          <div className="absolute top-0 left-0 right-0 h-[10px] bg-amber/80" />
+                          <div className="absolute inset-0 flex items-center justify-center pt-2">
+                            <div className="text-void font-mono text-[5px] text-center tracking-wider leading-relaxed font-bold">
+                              SAVING
+                              <br />
+                              HUMANITY
+                              <br />
+                              ONE HOLE
+                              <br />
+                              AT A TIME
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Stickers */}
+                    {idx === 2 && (
+                      <div className="relative w-36 h-28">
+                        <div className="absolute top-0 left-2 w-16 h-16 rounded-full bg-red/80 flex items-center justify-center -rotate-12 shadow-lg">
+                          <span className="font-mono text-cream text-[5px] text-center font-bold tracking-wider leading-tight">
+                            CTRL+Z
+                            <br />
+                            WON&apos;T
+                            <br />
+                            SAVE YOU
+                          </span>
+                        </div>
+                        <div className="absolute top-4 right-0 w-14 h-14 rounded-lg bg-green/80 flex items-center justify-center rotate-[8deg] shadow-lg">
+                          <span className="font-mono text-void text-[5px] text-center font-bold tracking-wider leading-tight">
+                            AI IS
+                            <br />A CRUTCH
+                          </span>
+                        </div>
+                        <div className="absolute bottom-0 left-6 w-20 h-8 rounded-md bg-amber flex items-center justify-center rotate-[3deg] shadow-lg">
+                          <span className="font-mono text-void text-[4.5px] text-center font-bold tracking-wider">
+                            I READ THE DOCS
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Details */}
+                  <div className="p-6">
+                    <div className="font-mono text-[10px] text-red tracking-[0.3em] mb-2">
+                      {item.tag}
+                    </div>
+                    <h3 className="font-heading text-xl text-fg-bright mb-2">
+                      {item.name}
+                    </h3>
+                    <p className="font-body text-sm text-fg-dim mb-4 leading-relaxed">
+                      {item.description}
+                    </p>
+                    <ul className="space-y-1.5 mb-6">
+                      {item.features.map((f) => (
+                        <li
+                          key={f}
+                          className="font-mono text-[11px] text-fg-dim flex items-start gap-2"
+                        >
+                          <span className="text-amber mt-0.5">&#9656;</span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xl font-bold text-amber glow-amber">
+                        {item.price}
+                      </span>
+                      <a href="/waitlist" className="font-mono text-xs tracking-[0.15em] bg-amber text-void px-5 py-2.5 hover:bg-amber-bright transition-colors">
+                        &gt; ADD_TO_CART
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── PRODUCTS ────────────────────────── */}
         <section id="products" className="py-24 sm:py-32 px-6">
           <div className="max-w-6xl mx-auto">
@@ -458,148 +599,6 @@ export default function Home() {
                         }`}
                       />
                     ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── MERCH ────────────────────────────── */}
-        <section className="py-24 sm:py-32 px-6 border-t border-amber/10">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16 reveal">
-              <p className="font-mono text-xs tracking-[0.4em] text-amber mb-4">
-                &#9670; GEAR &#9670;
-              </p>
-              <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl text-fg-bright">
-                ANALOG MERCH
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {MERCH.map((item, idx) => (
-                <div
-                  key={item.name}
-                  className="reveal bg-surface border border-amber/10 overflow-hidden hover:border-amber/20 transition-all duration-300 group"
-                  style={{ transitionDelay: `${idx * 0.15}s` }}
-                >
-                  {/* Visual */}
-                  <div className="bg-elevated flex items-center justify-center p-8 sm:p-10 min-h-[220px] relative overflow-hidden">
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background:
-                          "radial-gradient(circle at center, rgba(255,140,0,0.06) 0%, transparent 70%)",
-                      }}
-                    />
-
-                    {/* Mug */}
-                    {idx === 0 && (
-                      <div className="relative">
-                        <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex gap-2">
-                          <div className="w-0.5 h-5 bg-amber/30 rounded-full steam-1" />
-                          <div className="w-0.5 h-4 bg-amber/20 rounded-full steam-2" />
-                          <div className="w-0.5 h-5 bg-amber/25 rounded-full steam-3" />
-                        </div>
-                        <div className="relative">
-                          <div className="w-28 h-32 bg-gradient-to-b from-amber to-amber-dim rounded-b-xl rounded-t-md flex flex-col items-center justify-center shadow-[0_0_30px_rgba(255,140,0,0.15)]">
-                            <div className="text-void font-heading text-3xl font-bold leading-none">
-                              1B+
-                            </div>
-                            <div className="text-void/60 font-mono text-[7px] tracking-[0.2em] mt-0.5">
-                              TOKEN CLUB
-                            </div>
-                          </div>
-                          <div className="absolute right-[-12px] top-[16%] w-4 h-[48%] border-[3px] border-amber rounded-r-xl" />
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Underwear */}
-                    {idx === 1 && (
-                      <div className="w-36 h-32 relative flex items-center justify-center">
-                        <div
-                          className="w-32 h-24 bg-fg-bright/90 relative"
-                          style={{
-                            clipPath:
-                              "polygon(8% 0%, 92% 0%, 100% 30%, 75% 70%, 55% 100%, 50% 100%, 45% 100%, 25% 70%, 0% 30%)",
-                          }}
-                        >
-                          {/* Waistband */}
-                          <div className="absolute top-0 left-0 right-0 h-[10px] bg-amber/80" />
-                          <div className="absolute inset-0 flex items-center justify-center pt-2">
-                            <div className="text-void font-mono text-[5px] text-center tracking-wider leading-relaxed font-bold">
-                              SAVING
-                              <br />
-                              HUMANITY
-                              <br />
-                              ONE HOLE
-                              <br />
-                              AT A TIME
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Stickers */}
-                    {idx === 2 && (
-                      <div className="relative w-36 h-28">
-                        <div className="absolute top-0 left-2 w-16 h-16 rounded-full bg-red/80 flex items-center justify-center -rotate-12 shadow-lg">
-                          <span className="font-mono text-cream text-[5px] text-center font-bold tracking-wider leading-tight">
-                            CTRL+Z
-                            <br />
-                            WON&apos;T
-                            <br />
-                            SAVE YOU
-                          </span>
-                        </div>
-                        <div className="absolute top-4 right-0 w-14 h-14 rounded-lg bg-green/80 flex items-center justify-center rotate-[8deg] shadow-lg">
-                          <span className="font-mono text-void text-[5px] text-center font-bold tracking-wider leading-tight">
-                            AI IS
-                            <br />A CRUTCH
-                          </span>
-                        </div>
-                        <div className="absolute bottom-0 left-6 w-20 h-8 rounded-md bg-amber flex items-center justify-center rotate-[3deg] shadow-lg">
-                          <span className="font-mono text-void text-[4.5px] text-center font-bold tracking-wider">
-                            I READ THE DOCS
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Details */}
-                  <div className="p-6">
-                    <div className="font-mono text-[10px] text-red tracking-[0.3em] mb-2">
-                      {item.tag}
-                    </div>
-                    <h3 className="font-heading text-xl text-fg-bright mb-2">
-                      {item.name}
-                    </h3>
-                    <p className="font-body text-sm text-fg-dim mb-4 leading-relaxed">
-                      {item.description}
-                    </p>
-                    <ul className="space-y-1.5 mb-6">
-                      {item.features.map((f) => (
-                        <li
-                          key={f}
-                          className="font-mono text-[11px] text-fg-dim flex items-start gap-2"
-                        >
-                          <span className="text-amber mt-0.5">&#9656;</span>
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-xl font-bold text-amber glow-amber">
-                        {item.price}
-                      </span>
-                      <a href="/waitlist" className="font-mono text-xs tracking-[0.15em] bg-amber text-void px-5 py-2.5 hover:bg-amber-bright transition-colors">
-                        &gt; ADD_TO_CART
-                      </a>
-                    </div>
                   </div>
                 </div>
               ))}
