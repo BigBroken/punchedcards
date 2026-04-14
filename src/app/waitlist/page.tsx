@@ -258,7 +258,7 @@ export default function Waitlist() {
                                       : "text-amber/60"
                                 }`}
                               >
-                                {d.hasHoles ? d.char.toLowerCase() : "\·"}
+                                {d.hasHoles ? d.char.toLowerCase() : "·"}
                               </span>
                             ))}
                           </div>
@@ -269,7 +269,7 @@ export default function Waitlist() {
                       <span className="font-mono text-[10px] text-fg-dim/40">
                         {emailString.length > 0
                           ? validEmail
-                            ? "\✓ Valid email"
+                            ? "✓ Valid email"
                             : "Keep punching..."
                           : "Punch holes in the card below to encode your email"}
                       </span>
@@ -596,7 +596,7 @@ export default function Waitlist() {
                                     : "text-void/70"
                               }`}
                             >
-                              {d.hasHoles ? d.char : "\·"}
+                              {d.hasHoles ? d.char : "·"}
                             </div>
                           ))}
                         </div>
@@ -635,9 +635,9 @@ export default function Waitlist() {
                     }`}
                   >
                     {validEmail
-                      ? "SUBMIT REGISTRATION \→"
+                      ? "SUBMIT REGISTRATION →"
                       : emailString.length > 0
-                        ? "KEEP PUNCHING\…"
+                        ? "KEEP PUNCHING…"
                         : "KEYPUNCH YOUR EMAIL TO SUBMIT"}
                   </button>
                   <p className="font-mono text-[9px] text-fg-dim/50 mt-3">

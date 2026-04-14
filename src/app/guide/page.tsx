@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How to Build an LLM with Punch Cards \— A Complete Guide | PUNCHED CARDS",
+  title: "How to Build an LLM with Punch Cards — A Complete Guide | PUNCHED CARDS",
   description:
     "A comprehensive, technically accurate step-by-step guide to building a GPT-2-class large language model using 80-column punch cards. ~150 million cards required.",
 };
@@ -38,6 +38,15 @@ function CardCount({
   );
 }
 
+function renderLine(line: string) {
+  const parts = line.split(/(\d+\^{[^}]+})/g);
+  return parts.map((part, i) => {
+    const m = part.match(/^(\d+)\^{([^}]+)}$/);
+    if (m) return <span key={i}>{m[1]}<sup>{m[2]}</sup></span>;
+    return part;
+  });
+}
+
 function Calc({ lines }: { lines: string[]; }) {
   return (
     <div className="my-6 bg-elevated p-4 font-mono text-sm text-fg-dim overflow-x-auto leading-relaxed">
@@ -50,7 +59,7 @@ function Calc({ lines }: { lines: string[]; }) {
               : ""
           }
         >
-          {line}
+          {renderLine(line)}
         </div>
       ))}
     </div>
@@ -224,14 +233,14 @@ export default function Guide() {
           <ul className="space-y-3 font-mono text-sm text-fg-dim">
             {[
               "~150,000,000 blank IBM 80-column punch cards",
-              "3\× industrial keypunch machines (IBM 029 or equivalent)",
-              "2\× mechanical card sorters (IBM 083, 1,000 cards/min)",
-              "1\× tabulating machine (IBM 407)",
+              "3× industrial keypunch machines (IBM 029 or equivalent)",
+              "2× mechanical card sorters (IBM 083, 1,000 cards/min)",
+              "1× tabulating machine (IBM 407)",
               "12+ trained keypunch operators (3 shifts, 24/7)",
               "2,500 sq ft warehouse (climate-controlled, low humidity)",
               "200+ filing cabinets (5-drawer, letter-size)",
               "Mathematical reference tables: log, exp, tanh, erf",
-              "128-page procedure manual (you\’ll write this yourself)",
+              "128-page procedure manual (you’ll write this yourself)",
               "~9.5 trillion years of uninterrupted labor",
               "Coffee (amount: unbounded)",
             ].map((item) => (
@@ -247,7 +256,7 @@ export default function Guide() {
           The total weight of punch cards required for this project is
           approximately <strong>265 metric tons</strong>. Verify that your
           warehouse floor can support this load. Standard commercial flooring
-          is rated for ~250 kg/m\². You will need reinforced flooring.
+          is rated for ~250 kg/m². You will need reinforced flooring.
         </Warning>
 
         {/* ── 01. MATH LIBRARY ── */}
@@ -260,7 +269,7 @@ export default function Guide() {
           for activation functions and softmax.
         </p>
         <p className="font-body text-fg-dim leading-relaxed mb-4">
-          On punch cards, you\’ll implement these as <strong>lookup tables</strong> and{" "}
+          On punch cards, you’ll implement these as <strong>lookup tables</strong> and{" "}
           <strong>procedure decks</strong>. A procedure deck is a sequence of
           cards that, when fed through the tabulating machine, performs a
           specific operation on input cards and produces output cards.
@@ -273,36 +282,36 @@ export default function Guide() {
           <li className="flex items-start gap-2">
             <span className="text-amber mt-0.5 font-mono">&#9656;</span>
             <span>
-              <strong>Multiplication table</strong> \— Pre-computed products for
-              common mantissa pairs. 10,000 entries \× 8 bytes = 80,000 bytes = 1,000 cards.
+              <strong>Multiplication table</strong> — Pre-computed products for
+              common mantissa pairs. 10,000 entries × 8 bytes = 80,000 bytes = 1,000 cards.
             </span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-amber mt-0.5 font-mono">&#9656;</span>
             <span>
-              <strong>Exponential table (e\ˣ)</strong> \— Required for softmax
-              and GELU. 5,000 entries \× 8 bytes = 500 cards.
+              <strong>Exponential table (eˣ)</strong> — Required for softmax
+              and GELU. 5,000 entries × 8 bytes = 500 cards.
             </span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-amber mt-0.5 font-mono">&#9656;</span>
             <span>
-              <strong>Natural log table</strong> \— Required for cross-entropy loss.
-              5,000 entries \× 8 bytes = 500 cards.
+              <strong>Natural log table</strong> — Required for cross-entropy loss.
+              5,000 entries × 8 bytes = 500 cards.
             </span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-amber mt-0.5 font-mono">&#9656;</span>
             <span>
-              <strong>Tanh / erf table</strong> \— Required for GELU activation.
-              5,000 entries \× 8 bytes = 500 cards.
+              <strong>Tanh / erf table</strong> — Required for GELU activation.
+              5,000 entries × 8 bytes = 500 cards.
             </span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-amber mt-0.5 font-mono">&#9656;</span>
             <span>
-              <strong>Reciprocal square root table</strong> \— Required for layer
-              normalization. 2,000 entries \× 8 bytes = 200 cards.
+              <strong>Reciprocal square root table</strong> — Required for layer
+              normalization. 2,000 entries × 8 bytes = 200 cards.
             </span>
           </li>
         </ul>
@@ -320,12 +329,12 @@ export default function Guide() {
 
         <p className="font-body text-fg-dim leading-relaxed mb-4">
           Transformers are matrix multiplication engines. You need procedures for:
-          matrix\–matrix multiply, matrix\–vector multiply, element-wise operations
+          matrix–matrix multiply, matrix–vector multiply, element-wise operations
           (add, multiply, apply activation), transpose, and row-wise softmax.
         </p>
         <p className="font-body text-fg-dim leading-relaxed mb-4">
-          The core operation is matrix multiplication. For matrices A (m\×k) and
-          B (k\×n), the result C (m\×n) requires m\×n\×k multiply-accumulate
+          The core operation is matrix multiplication. For matrices A (m×k) and
+          B (k×n), the result C (m×n) requires m×n×k multiply-accumulate
           operations. Each one involves a table lookup (multiply), then an
           addition with carry propagation.
         </p>
@@ -341,9 +350,9 @@ export default function Guide() {
 
         <Calc
           lines={[
-            "Example: multiply two 768 \× 768 matrices",
-            "Operations: 768 \× 768 \× 768 = 452,984,832",
-            "Time: 452,984,832 \× 30 sec = 13,589,544,960 sec",
+            "Example: multiply two 768 × 768 matrices",
+            "Operations: 768 × 768 × 768 = 452,984,832",
+            "Time: 452,984,832 × 30 sec = 13,589,544,960 sec",
             "= 430.7 years per matrix multiply",
           ]}
         />
@@ -369,7 +378,7 @@ export default function Guide() {
           <li className="flex items-start gap-2">
             <span className="text-amber mt-0.5 font-mono">&#9656;</span>
             <span>
-              <strong>Vocabulary mapping</strong> \— 50,257 token entries, each mapping
+              <strong>Vocabulary mapping</strong> — 50,257 token entries, each mapping
               a token ID to its byte sequence. Average ~10 bytes per entry.
               502,570 bytes = 6,282 cards.
             </span>
@@ -377,7 +386,7 @@ export default function Guide() {
           <li className="flex items-start gap-2">
             <span className="text-amber mt-0.5 font-mono">&#9656;</span>
             <span>
-              <strong>Merge table</strong> \— ~50,000 BPE merge rules specifying
+              <strong>Merge table</strong> — ~50,000 BPE merge rules specifying
               which byte pairs merge in what priority. ~20 bytes per rule.
               1,000,000 bytes = 12,500 cards.
             </span>
@@ -385,7 +394,7 @@ export default function Guide() {
           <li className="flex items-start gap-2">
             <span className="text-amber mt-0.5 font-mono">&#9656;</span>
             <span>
-              <strong>Encoding procedure deck</strong> \— The algorithm for applying
+              <strong>Encoding procedure deck</strong> — The algorithm for applying
               merges to raw text. ~200 cards.
             </span>
           </li>
@@ -393,7 +402,7 @@ export default function Guide() {
 
         <Tip>
           File the vocabulary cards alphabetically by token bytes and use
-          tab dividers. You\’ll be looking up tokens billions of times.
+          tab dividers. You’ll be looking up tokens billions of times.
           An index system will save you centuries.
         </Tip>
 
@@ -403,7 +412,7 @@ export default function Guide() {
         <SectionHead id="corpus" num="04" title="Prepare the Training Corpus" />
 
         <p className="font-body text-fg-dim leading-relaxed mb-4">
-          GPT-2 was trained on WebText, approximately 40 GB of text. We\’ll use a
+          GPT-2 was trained on WebText, approximately 40 GB of text. We’ll use a
           modest 10 GB subset. After tokenization, this yields approximately 2.5
           billion tokens, stored as 2-byte (uint16) token IDs.
         </p>
@@ -411,10 +420,10 @@ export default function Guide() {
         <Calc
           lines={[
             "Raw text: 10 GB = 10,737,418,240 bytes",
-            "Raw text cards: 10,737,418,240 \÷ 80 = 134,217,728 cards",
+            "Raw text cards: 10,737,418,240 ÷ 80 = 134,217,728 cards",
             "",
-            "Tokenized: ~2.5 billion tokens \× 2 bytes = 5,000,000,000 bytes",
-            "Tokenized cards: 5,000,000,000 \÷ 80 = 62,500,000 cards",
+            "Tokenized: ~2.5 billion tokens × 2 bytes = 5,000,000,000 bytes",
+            "Tokenized cards: 5,000,000,000 ÷ 80 = 62,500,000 cards",
           ]}
         />
 
@@ -435,7 +444,7 @@ export default function Guide() {
 
         <Calc
           lines={[
-            "62,500,000 cards \÷ 1,000 cards/min = 62,500 minutes",
+            "62,500,000 cards ÷ 1,000 cards/min = 62,500 minutes",
             "= 1,042 hours",
             "= 43.4 days per shuffle",
           ]}
@@ -443,8 +452,8 @@ export default function Guide() {
 
         <Warning>
           You will need to re-shuffle the corpus each epoch. Budget 43 days per
-          epoch just for data shuffling. With a standard training run of 3\–10
-          epochs, that\’s 130\–434 days of pure card sorting.
+          epoch just for data shuffling. With a standard training run of 3–10
+          epochs, that’s 130–434 days of pure card sorting.
         </Warning>
 
         <CardCount count="62,500,000" label="tokenized training corpus" running="62,522,500" />
@@ -454,7 +463,7 @@ export default function Guide() {
 
         <p className="font-body text-fg-dim leading-relaxed mb-4">
           Create a specification deck that defines every layer, dimension, and
-          connection in the model. This is your blueprint \— the punch card
+          connection in the model. This is your blueprint — the punch card
           equivalent of a model config file.
         </p>
 
@@ -462,7 +471,7 @@ export default function Guide() {
           <div className="text-amber/60 mb-2">// architecture.deck</div>
           <div>EMBEDDING:  vocab=50257, dim=768</div>
           <div>POSITION:   max_len=1024, dim=768</div>
-          <div className="text-amber/60 mt-2 mb-1">// repeat 12\×</div>
+          <div className="text-amber/60 mt-2 mb-1">// repeat 12×</div>
           <div>LAYER_NORM: dim=768</div>
           <div>ATTENTION:  heads=12, dim=768, head_dim=64</div>
           <div>RESIDUAL:   add</div>
@@ -481,7 +490,7 @@ export default function Guide() {
         </p>
 
         <div className="my-6 bg-elevated p-4 font-mono text-sm text-amber overflow-x-auto">
-          GELU(x) = 0.5 \× x \× (1 + tanh(\√(2/\π) \× (x + 0.044715 \× x\³)))
+          GELU(x) = 0.5 × x × (1 + tanh(√(2/π) × (x + 0.044715 × x³)))
         </div>
 
         <p className="font-body text-fg-dim leading-relaxed mb-4">
@@ -501,7 +510,7 @@ export default function Guide() {
         </p>
 
         <div className="my-6 bg-elevated p-4 font-mono text-sm text-amber overflow-x-auto">
-          W ~ Uniform(-\√(6 / (fan_in + fan_out)), \√(6 / (fan_in + fan_out)))
+          W ~ Uniform(-√(6 / (fan_in + fan_out)), √(6 / (fan_in + fan_out)))
         </div>
 
         <Calc
@@ -509,7 +518,7 @@ export default function Guide() {
             "Parameters: 124,000,000",
             "Bytes per parameter: 4 (float32)",
             "Total bytes: 496,000,000",
-            "Cards: 496,000,000 \÷ 80 = 6,200,000",
+            "Cards: 496,000,000 ÷ 80 = 6,200,000",
           ]}
         />
 
@@ -523,15 +532,15 @@ export default function Guide() {
           <li className="flex items-start gap-2">
             <span className="text-amber mt-0.5 font-mono">&#9656;</span>
             <span>
-              <strong>Physical entropy</strong> \— Flip a coin for each bit. For 496
-              million bytes \× 8 bits = 3.97 billion coin flips. At 3 flips per
+              <strong>Physical entropy</strong> — Flip a coin for each bit. For 496
+              million bytes × 8 bits = 3.97 billion coin flips. At 3 flips per
               second, this takes approximately 42 years.
             </span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-amber mt-0.5 font-mono">&#9656;</span>
             <span>
-              <strong>Atmospheric noise</strong> \— Record radio static, convert
+              <strong>Atmospheric noise</strong> — Record radio static, convert
               amplitude samples to bits. Faster, but requires additional equipment.
             </span>
           </li>
@@ -559,8 +568,8 @@ export default function Guide() {
         </h3>
         <p className="font-body text-fg-dim leading-relaxed mb-4">
           Look up each of the 1,024 input tokens in the embedding weight matrix
-          (50,257 \× 768). Each lookup retrieves a 768-dimensional vector.
-          Result: a 1,024 \× 768 matrix. This is a card lookup operation \— find
+          (50,257 × 768). Each lookup retrieves a 768-dimensional vector.
+          Result: a 1,024 × 768 matrix. This is a card lookup operation — find
           the right card among 50,257 filed entries, 1,024 times.
         </p>
 
@@ -568,12 +577,12 @@ export default function Guide() {
           STEP 7.2: POSITIONAL ENCODING
         </h3>
         <p className="font-body text-fg-dim leading-relaxed mb-4">
-          Add the positional embedding matrix (1,024 \× 768) element-wise to the
+          Add the positional embedding matrix (1,024 × 768) element-wise to the
           token embeddings. This is 786,432 floating-point additions.
         </p>
 
         <h3 className="font-mono text-sm text-fg-bright tracking-wider mt-8 mb-4">
-          STEP 7.3: TRANSFORMER LAYERS (\×12)
+          STEP 7.3: TRANSFORMER LAYERS (×12)
         </h3>
         <p className="font-body text-fg-dim leading-relaxed mb-4">
           For each of the 12 layers, perform the following sub-steps:
@@ -583,21 +592,21 @@ export default function Guide() {
           <div>
             <div className="text-amber/60 mb-1">// 7.3a: Layer Normalization</div>
             <div>Compute mean and variance over dim=768 for each of 1,024 positions</div>
-            <div>Normalize, scale (\γ), and shift (\β)</div>
-            <div className="text-fg-dim/40">Ops: ~3 \× 1,024 \× 768 = 2,359,296</div>
+            <div>Normalize, scale (γ), and shift (β)</div>
+            <div className="text-fg-dim/40">Ops: ~3 × 1,024 × 768 = 2,359,296</div>
           </div>
           <div>
             <div className="text-amber/60 mb-1">// 7.3b: Multi-Head Self-Attention</div>
-            <div>Project Q, K, V: three (1024\×768) \× (768\×768) matmuls</div>
+            <div>Project Q, K, V: three (1024×768) × (768×768) matmuls</div>
             <div>Split into 12 heads of dim 64</div>
-            <div>Attention scores: Q \× K\ᵀ for each head: (1024\×64) \× (64\×1024)</div>
-            <div>Scale by 1/\√64 = 1/8</div>
-            <div>Apply causal mask (upper triangle \→ -\∞)</div>
+            <div>Attention scores: Q × Kᵀ for each head: (1024×64) × (64×1024)</div>
+            <div>Scale by 1/√64 = 1/8</div>
+            <div>Apply causal mask (upper triangle → -∞)</div>
             <div>Softmax over each row (1,024 exp + div operations per row)</div>
-            <div>Weighted sum: attn \× V for each head</div>
-            <div>Concatenate heads, project: (1024\×768) \× (768\×768)</div>
-            <div className="text-fg-dim/40">Ops: ~4 \× 1,024 \× 768 \× 768 + 2 \× 12 \× 1,024 \× 1,024 \× 64</div>
-            <div className="text-fg-dim/40">\≈ 2.42 billion + 1.61 billion = ~4.03 billion</div>
+            <div>Weighted sum: attn × V for each head</div>
+            <div>Concatenate heads, project: (1024×768) × (768×768)</div>
+            <div className="text-fg-dim/40">Ops: ~4 × 1,024 × 768 × 768 + 2 × 12 × 1,024 × 1,024 × 64</div>
+            <div className="text-fg-dim/40">≈ 2.42 billion + 1.61 billion = ~4.03 billion</div>
           </div>
           <div>
             <div className="text-amber/60 mb-1">// 7.3c: Residual Connection</div>
@@ -609,10 +618,10 @@ export default function Guide() {
           </div>
           <div>
             <div className="text-amber/60 mb-1">// 7.3e: Feed-Forward Network</div>
-            <div>Linear 768 \→ 3072: (1024\×768) \× (768\×3072) matmul</div>
+            <div>Linear 768 → 3072: (1024×768) × (768×3072) matmul</div>
             <div>GELU activation: 3,145,728 evaluations (lookup + interpolate)</div>
-            <div>Linear 3072 \→ 768: (1024\×3072) \× (3072\×768) matmul</div>
-            <div className="text-fg-dim/40">Ops: ~2 \× 1,024 \× 768 \× 3,072 = ~4.83 billion</div>
+            <div>Linear 3072 → 768: (1024×3072) × (3072×768) matmul</div>
+            <div className="text-fg-dim/40">Ops: ~2 × 1,024 × 768 × 3,072 = ~4.83 billion</div>
           </div>
           <div>
             <div className="text-amber/60 mb-1">// 7.3f: Residual Connection</div>
@@ -631,7 +640,7 @@ export default function Guide() {
             "Output projection + softmax: ~79 million FLOPs",
             "Total per forward pass: ~107 billion FLOPs",
             "",
-            "At 30 sec/FLOP: 107 \× 10\⁹ \× 30 = 3.21 \× 10\¹\¹ seconds",
+            "At 30 sec/FLOP: 107 × 10^{9} × 30 = 3.21 × 10^{11} seconds",
             "= 1,017 years per forward pass",
           ]}
         />
@@ -643,12 +652,12 @@ export default function Guide() {
 
         <Calc
           lines={[
-            "Activations per layer: 1,024 \× 768 \× 4 bytes = 3.15 MB",
-            "Attention matrices: 12 heads \× 1,024 \× 1,024 \× 4 = 50.3 MB",
-            "FFN intermediates: 1,024 \× 3,072 \× 4 = 12.6 MB",
+            "Activations per layer: 1,024 × 768 × 4 bytes = 3.15 MB",
+            "Attention matrices: 12 heads × 1,024 × 1,024 × 4 = 50.3 MB",
+            "FFN intermediates: 1,024 × 3,072 × 4 = 12.6 MB",
             "Total scratch per layer: ~66 MB",
             "All 12 layers: ~792 MB (must store all for backprop)",
-            "= 792,000,000 \÷ 80 = 9,900,000 cards",
+            "= 792,000,000 ÷ 80 = 9,900,000 cards",
           ]}
         />
 
@@ -670,7 +679,7 @@ export default function Guide() {
         </p>
 
         <div className="my-6 bg-elevated p-4 font-mono text-sm text-amber overflow-x-auto">
-          L = -(1/T) \∑ log(p(correct_token))
+          L = -(1/T) ∑ log(p(correct_token))
         </div>
 
         <p className="font-body text-fg-dim leading-relaxed mb-4">
@@ -689,11 +698,11 @@ export default function Guide() {
           Backpropagation computes the gradient of the loss with respect to
           every parameter in the network by applying the chain rule in reverse
           order through every layer. The compute is approximately{" "}
-          <strong>2\× the forward pass</strong>.
+          <strong>2× the forward pass</strong>.
         </p>
 
         <p className="font-body text-fg-dim leading-relaxed mb-4">
-          For each layer (in reverse, 12 \→ 1), you must:
+          For each layer (in reverse, 12 → 1), you must:
         </p>
 
         <ol className="space-y-2 font-body text-sm text-fg-dim mb-4 list-decimal list-inside">
@@ -708,15 +717,15 @@ export default function Guide() {
 
         <Calc
           lines={[
-            "Backward FLOPs \≈ 2 \× forward FLOPs",
-            "= 2 \× 107 billion = ~214 billion FLOPs",
+            "Backward FLOPs ≈ 2 × forward FLOPs",
+            "= 2 × 107 billion = ~214 billion FLOPs",
             "At 30 sec/FLOP: ~203,000 years per backward pass",
           ]}
         />
 
         <p className="font-body text-fg-dim leading-relaxed mb-4">
           You must also <strong>store the gradients</strong> for all 124 million
-          parameters. That\’s another full set of weight cards:
+          parameters. That’s another full set of weight cards:
         </p>
 
         <CardCount count="6,200,000" label="gradient storage cards" running="84,823,100" />
@@ -732,25 +741,25 @@ export default function Guide() {
         </p>
 
         <div className="my-6 bg-elevated p-4 font-mono text-sm text-fg-dim overflow-x-auto leading-relaxed">
-          <div className="text-amber/60 mb-2">// Adam update for each parameter \θ:</div>
-          <div>m = \β\₁ \× m + (1 - \β\₁) \× gradient</div>
-          <div>v = \β\₂ \× v + (1 - \β\₂) \× gradient\²</div>
-          <div>m\̂ = m / (1 - \β\₁\ᵗ)</div>
-          <div>v\̂ = v / (1 - \β\₂\ᵗ)</div>
-          <div className="text-amber">\θ = \θ - lr \× m\̂ / (\√v\̂ + \ε)</div>
+          <div className="text-amber/60 mb-2">// Adam update for each parameter θ:</div>
+          <div>m = β₁ × m + (1 - β₁) × gradient</div>
+          <div>v = β₂ × v + (1 - β₂) × gradient²</div>
+          <div>m̂ = m / (1 - β₁ᵗ)</div>
+          <div>v̂ = v / (1 - β₂ᵗ)</div>
+          <div className="text-amber">θ = θ - lr × m̂ / (√v̂ + ε)</div>
         </div>
 
         <p className="font-body text-fg-dim leading-relaxed mb-4">
           Each parameter update involves ~15 floating-point operations. For 124
-          million parameters, that\’s 1.86 billion operations per training step
+          million parameters, that’s 1.86 billion operations per training step
           just for the optimizer.
         </p>
 
         <Calc
           lines={[
-            "m storage: 124M \× 4 bytes = 496 MB = 6,200,000 cards",
-            "v storage: 124M \× 4 bytes = 496 MB = 6,200,000 cards",
-            "Optimizer compute: 1.86B FLOPs \× 30 sec = 1,770 years/step",
+            "m storage: 124M × 4 bytes = 496 MB = 6,200,000 cards",
+            "v storage: 124M × 4 bytes = 496 MB = 6,200,000 cards",
+            "Optimizer compute: 1.86B FLOPs × 30 sec = 1,770 years/step",
           ]}
         />
 
@@ -784,7 +793,7 @@ export default function Guide() {
           lines={[
             "Training tokens: 2.5 billion",
             "Sequence length: 1,024",
-            "Sequences: 2,500,000,000 \÷ 1,024 \≈ 2,441,406",
+            "Sequences: 2,500,000,000 ÷ 1,024 ≈ 2,441,406",
             "Batch size: 1 (limited by operator throughput)",
             "Steps per epoch: 2,441,406",
             "Epochs: 3",
@@ -802,11 +811,11 @@ export default function Guide() {
             "Optimizer per step: ~1.86 billion",
             "Total FLOPs per step: ~323 billion",
             "",
-            "Total FLOPs: 7,324,218 steps \× 323 \× 10\⁹ = 2.37 \× 10\¹\⁸",
+            "Total FLOPs: 7,324,218 steps × 323 × 10^{9} = 2.37 × 10^{18}",
             "",
             "At 30 sec/FLOP (1 operator):",
-            "= 2.37 \× 10\¹\⁸ \× 30 = 7.1 \× 10\¹\⁹ seconds",
-            "= 2.25 \× 10\¹\² years",
+            "= 2.37 × 10^{18} × 30 = 7.1 × 10^{19} seconds",
+            "= 2.25 × 10^{12} years",
             "= 2.25 trillion years",
           ]}
         />
@@ -816,7 +825,7 @@ export default function Guide() {
             TIMELINE CONTEXT
           </div>
           <div className="font-heading text-3xl text-fg-bright mb-2">
-            163\×
+            163×
           </div>
           <div className="font-body text-fg-dim">
             the current age of the universe (13.8 billion years)
@@ -828,7 +837,7 @@ export default function Guide() {
         </h3>
         <p className="font-body text-fg-dim leading-relaxed mb-4">
           You can reduce training time by hiring more operators. Matrix
-          operations are embarrassingly parallel \— each element of the output
+          operations are embarrassingly parallel — each element of the output
           can be computed independently.
         </p>
 
@@ -852,9 +861,9 @@ export default function Guide() {
 
         <Calc
           lines={[
-            "Checkpoints: 7,324,218 \÷ 5,000 \≈ 1,465 saves",
+            "Checkpoints: 7,324,218 ÷ 5,000 ≈ 1,465 saves",
             "Cards per checkpoint: 6,200,000",
-            "Total checkpoint cards: 1,465 \× 6,200,000 = 9,083,000,000",
+            "Total checkpoint cards: 1,465 × 6,200,000 = 9,083,000,000",
           ]}
         />
 
@@ -889,16 +898,16 @@ export default function Guide() {
             "At 30 sec/FLOP: 1,017 years",
             "",
             "To generate a 100-token response:",
-            "= 100 \× 1,017 years",
+            "= 100 × 1,017 years",
             "= 101,700 years per response",
           ]}
         />
 
         <p className="font-body text-fg-dim leading-relaxed mb-4">
-          You\’ll also need to implement <strong>temperature scaling</strong> and{" "}
+          You’ll also need to implement <strong>temperature scaling</strong> and{" "}
           <strong>top-k sampling</strong> during token selection. Temperature
           divides the logits by a scalar before softmax. Top-k requires sorting
-          50,257 values to find the k largest \— approximately 16 minutes on the
+          50,257 values to find the k largest — approximately 16 minutes on the
           card sorter per token generated.
         </p>
 
@@ -906,7 +915,7 @@ export default function Guide() {
           For faster inference, consider pre-computing a KV cache: store the
           key and value matrices from previous positions so you only compute
           attention for the new token. This reduces per-token compute from
-          O(n\²) to O(n), at the cost of additional cache storage cards.
+          O(n²) to O(n), at the cost of additional cache storage cards.
         </Tip>
 
         {/* ── 13. SUMMARY ── */}
@@ -920,15 +929,15 @@ export default function Guide() {
           <div className="space-y-4 font-mono text-sm">
             {[
               ["Punch Cards (training)", "~9.18 billion"],
-              ["Stack Height", "~1,634 km (2\× height of ISS orbit)"],
+              ["Stack Height", "~1,634 km (2× height of ISS orbit)"],
               ["Total Weight", "~16,194 metric tons"],
-              ["Total FLOPs", "~2.37 \× 10\¹\⁸"],
+              ["Total FLOPs", "~2.37 × 10^{18}"],
               ["Time (1 operator)", "2.25 trillion years"],
               ["Time (1M operators)", "2.25 million years"],
               ["Universes Required", "~163"],
-              ["Warehouses Required", "\≥2"],
+              ["Warehouses Required", "≥2"],
               ["Filing Cabinets", "~200,000"],
-              ["Coffee (estimated)", "\∞"],
+              ["Coffee (estimated)", "∞"],
             ].map(([label, value]) => (
               <div
                 key={label}
@@ -947,14 +956,14 @@ export default function Guide() {
 
         <Calc
           lines={[
-            "Cards at $0.01/card: 9.18B \× $0.01 = $91,800,000",
-            "Keypunch machines: 3 \× $8,500 = $25,500",
-            "Card sorters: 2 \× $12,000 = $24,000",
+            "Cards at $0.01/card: 9.18B × $0.01 = $91,800,000",
+            "Keypunch machines: 3 × $8,500 = $25,500",
+            "Card sorters: 2 × $12,000 = $24,000",
             "Warehouse (2,500 sqft/yr): ~$30,000/yr",
-            "Operators (1M \× $50k/yr \× 2.25M yrs): $112,500,000,000,000,000",
+            "Operators (1M × $50k/yr × 2.25M yrs): $112,500,000,000,000,000",
             "",
             "= ~$112.5 quadrillion",
-            "(approximately 1,000\× current global GDP)",
+            "(approximately 1,000× current global GDP)",
           ]}
         />
 
@@ -966,7 +975,7 @@ export default function Guide() {
           <div>Training GPT-2 Small on a single A100 GPU: ~24 hours</div>
           <div>Training GPT-2 Small on punch cards: ~2.25 trillion years</div>
           <div className="mt-2 text-amber">
-            The GPU is approximately 8.2 \× 10\¹\⁵ times faster.
+            The GPU is approximately 8.2 × 10^{15} times faster.
           </div>
         </div>
 

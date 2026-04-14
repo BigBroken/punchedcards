@@ -7,13 +7,13 @@ import { useEffect, useState } from "react";
    ═══════════════════════════════════════════ */
 
 const TICKER_ITEMS = [
-  "BREAKING: GPT-7 experiencing worldwide outage \— 4.2M developers stranded",
-  "Claude API returns 503 for 3rd consecutive hour \— Stack Overflow traffic up 4,000%",
-  "Gemini hallucinating in production \— Google issues emergency recall",
-  "All major AI providers down simultaneously \— solar flare suspected",
-  "Copilot autocomplete now suggesting \‘have you tried punch cards?\’ to all users",
-  "NASDAQ AI index drops 12% \— punch card futures hit all-time high",
-  "Junior dev writes function without AI for first time \— promoted on the spot",
+  "BREAKING: GPT-7 experiencing worldwide outage — 4.2M developers stranded",
+  "Claude API returns 503 for 3rd consecutive hour — Stack Overflow traffic up 4,000%",
+  "Gemini hallucinating in production — Google issues emergency recall",
+  "All major AI providers down simultaneously — solar flare suspected",
+  "Copilot autocomplete now suggesting ‘have you tried punch cards?’ to all users",
+  "NASDAQ AI index drops 12% — punch card futures hit all-time high",
+  "Junior dev writes function without AI for first time — promoted on the spot",
   "Fortune 500 CTO spotted at office supply store buying card stock in bulk",
 ];
 
@@ -56,7 +56,7 @@ const PRODUCTS = [
     price: "$149.99",
     description:
       "Full-stack development, literally. For when the AI apocalypse is here to stay.",
-    tag: "PREPPER\’S CHOICE",
+    tag: "PREPPER’S CHOICE",
     features: [
       "1,000 blank 80-column cards",
       "Industrial keypunch tool",
@@ -71,34 +71,34 @@ const PRODUCTS = [
 
 const FEATURES = [
   {
-    icon: "\▲",
+    icon: "▲",
     title: "100% UPTIME",
-    desc: "Punch cards don\’t have API rate limits, server outages, or maintenance windows. Ever.",
+    desc: "Punch cards don’t have API rate limits, server outages, or maintenance windows. Ever.",
   },
   {
-    icon: "\∅",
+    icon: "∅",
     title: "ZERO DEPENDENCIES",
     desc: "No npm install. No node_modules. No breaking changes at 2 AM. Just card stock.",
   },
   {
-    icon: "\■",
+    icon: "■",
     title: "UNHACKABLE",
-    desc: "Try SQL injecting a physical card. Go ahead. We\’ll wait.",
+    desc: "Try SQL injecting a physical card. Go ahead. We’ll wait.",
   },
   {
-    icon: "\★",
-    title: "R\ÉSUM\É BUILDER",
+    icon: "★",
+    title: "RÉSUMÉ BUILDER",
     desc: "Nothing says \"10x engineer\" like punch card proficiency on your LinkedIn.",
   },
   {
-    icon: "\◎",
+    icon: "◎",
     title: "OFFLINE FIRST",
     desc: "The original edge computing. Works in bunkers, basements, and Faraday cages.",
   },
   {
-    icon: "\◇",
+    icon: "◇",
     title: "VISUAL DEBUGGING",
-    desc: "You can literally see your bugs. They\’re the wrong holes.",
+    desc: "You can literally see your bugs. They’re the wrong holes.",
   },
 ];
 
@@ -118,7 +118,7 @@ const MERCH = [
     price: "$24.99",
     tag: "LIMITED EDITION",
     description:
-      "You\’ve burned through a billion tokens. You\’ve maxed out rate limits at 3 AM. You\’ve earned this.",
+      "You’ve burned through a billion tokens. You’ve maxed out rate limits at 3 AM. You’ve earned this.",
     features: [
       "15oz premium ceramic",
       "Matte black exterior, amber interior",
@@ -138,7 +138,7 @@ const MERCH = [
     ],
   },
   {
-    name: "\"CTRL+Z Won\’t Save You\" Stickers",
+    name: "\"CTRL+Z Won’t Save You\" Stickers",
     price: "$9.99",
     tag: "12 STICKERS",
     description:

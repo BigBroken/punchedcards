@@ -18,16 +18,16 @@ const QUESTIONS = [
   },
   {
     question:
-      'A standard IBM punch card measures 7.375" \× 3.25" with 80 columns \× 12 rows of punch positions. What is the approximate data density in bits per square inch?',
+      'A standard IBM punch card measures 7.375" × 3.25" with 80 columns × 12 rows of punch positions. What is the approximate data density in bits per square inch?',
     options: [
-      "~12 bits/in\²",
-      "~25 bits/in\²",
-      "~40 bits/in\²",
-      "~80 bits/in\²",
+      "~12 bits/in²",
+      "~25 bits/in²",
+      "~40 bits/in²",
+      "~80 bits/in²",
     ],
     correct: 2,
     explanation:
-      "Total bit positions: 80 \× 12 = 960 bits. Card area: 7.375 \× 3.25 = 23.97 in\². Density: 960 \÷ 23.97 \≈ 40.05 bits/in\².",
+      "Total bit positions: 80 × 12 = 960 bits. Card area: 7.375 × 3.25 = 23.97 in². Density: 960 ÷ 23.97 ≈ 40.05 bits/in².",
   },
   {
     question:
@@ -35,12 +35,12 @@ const QUESTIONS = [
     options: [
       "1 pass",
       "6 passes",
-      "log\₂(N) passes, where N = deck size",
+      "log₂(N) passes, where N = deck size",
       "36 passes",
     ],
     correct: 1,
     explanation:
-      "Mechanical card sorters implement radix sort (LSD variant). Each digit position requires exactly one pass through the sorter, so a 6-digit key requires 6 passes \— regardless of deck size.",
+      "Mechanical card sorters implement radix sort (LSD variant). Each digit position requires exactly one pass through the sorter, so a 6-digit key requires 6 passes — regardless of deck size.",
   },
   {
     question:
@@ -48,7 +48,7 @@ const QUESTIONS = [
     options: ["12", "256", "4,096", "479,001,600"],
     correct: 2,
     explanation:
-      "Each of the 12 rows is either punched or not \— a binary choice. 2\¹\² = 4,096 possible combinations per column. (479,001,600 = 12!, a factorial red herring.)",
+      "Each of the 12 rows is either punched or not — a binary choice. 2¹² = 4,096 possible combinations per column. (479,001,600 = 12!, a factorial red herring.)",
   },
   {
     question:
@@ -61,7 +61,7 @@ const QUESTIONS = [
     ],
     correct: 2,
     explanation:
-      "1,000 cards/min \× 80 bytes/card = 80,000 bytes/min. Divide by 60: 80,000 \÷ 60 = 1,333.3 bytes/sec \— roughly 1.3 KB/s.",
+      "1,000 cards/min × 80 bytes/card = 80,000 bytes/min. Divide by 60: 80,000 ÷ 60 = 1,333.3 bytes/sec — roughly 1.3 KB/s.",
   },
   {
     question:
@@ -74,7 +74,7 @@ const QUESTIONS = [
     ],
     correct: 1,
     explanation:
-      "1 GB = 1,073,741,824 bytes. At 80 bytes per card: 1,073,741,824 \÷ 80 = 13,421,773 cards, or approximately 13.4 million.",
+      "1 GB = 1,073,741,824 bytes. At 80 bytes per card: 1,073,741,824 ÷ 80 = 13,421,773 cards, or approximately 13.4 million.",
   },
   {
     question:
@@ -82,7 +82,7 @@ const QUESTIONS = [
     options: ["17.8 meters", "56 meters", "178 meters", "1,780 meters"],
     correct: 2,
     explanation:
-      "1,000,000 \× 0.178 mm = 178,000 mm = 178 meters. That\'s roughly the height of a 50-story building.",
+      "1,000,000 × 0.178 mm = 178,000 mm = 178 meters. That's roughly the height of a 50-story building.",
   },
   {
     question:
@@ -95,7 +95,7 @@ const QUESTIONS = [
     ],
     correct: 0,
     explanation:
-      "In Hollerith encoding, letters A\–I use Zone 12 (the top zone punch) plus digit rows 1\–9. So \'A\' = Row 12 (zone) + Row 1 (digit).",
+      "In Hollerith encoding, letters A–I use Zone 12 (the top zone punch) plus digit rows 1–9. So 'A' = Row 12 (zone) + Row 1 (digit).",
   },
   {
     question:
@@ -103,7 +103,7 @@ const QUESTIONS = [
     options: ["5 minutes", "10 minutes", "20 minutes", "50 minutes"],
     correct: 2,
     explanation:
-      "Radix sort requires one pass per digit position: 4 passes. Each pass processes the full deck: 5,000 \÷ 1,000 = 5 min per pass. Total: 4 \× 5 = 20 minutes.",
+      "Radix sort requires one pass per digit position: 4 passes. Each pass processes the full deck: 5,000 ÷ 1,000 = 5 min per pass. Total: 4 × 5 = 20 minutes.",
   },
   {
     question:
@@ -116,7 +116,7 @@ const QUESTIONS = [
     ],
     correct: 2,
     explanation:
-      "1 TB \≈ 1.1 \× 10\¹\² bytes \÷ 80 \≈ 13.74 billion cards. Weight: 13.74 \× 10\⁹ \× 1.764 g \≈ 24,244 metric tons \— about four Eiffel Towers.",
+      "1 TB ≈ 1.1 × 10¹² bytes ÷ 80 ≈ 13.74 billion cards. Weight: 13.74 × 10⁹ × 1.764 g ≈ 24,244 metric tons — about four Eiffel Towers.",
   },
 ];
 
