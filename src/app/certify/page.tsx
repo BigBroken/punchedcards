@@ -264,7 +264,7 @@ export default function Certify() {
                   density, and punch card engineering. Real calculations
                   required. No hand-holding.
                 </p>
-                <p className="font-body text-sm text-amber-dim max-w-sm mx-auto mb-3 leading-relaxed italic">
+                <p className="font-body text-sm text-amber max-w-sm mx-auto mb-3 leading-relaxed italic glow-amber">
                   Employers are actively seeking candidates with this
                   in-demand certification. Stand out from the crowd.
                 </p>
