@@ -315,10 +315,10 @@ export default function Home() {
           </div>
 
           <a
-            href="#products"
+            href="/certify"
             className="font-mono text-xs sm:text-sm tracking-[0.2em] text-void bg-amber hover:bg-amber-bright px-8 py-3 transition-all duration-300 animate-fade-up delay-5 hover:shadow-[0_0_30px_rgba(255,140,0,0.3)]"
           >
-            SHOP SURVIVAL KITS &rarr;
+            EARN YOUR SURVIVAL KIT &rarr;
           </a>
 
           {/* Hero Stats */}
@@ -632,7 +632,7 @@ export default function Home() {
               <p className="font-body text-fg-dim max-w-md mx-auto mb-8 leading-relaxed">
                 Pass our 10-question proficiency exam on analog computation,
                 Hollerith encoding, and punch card engineering. Add it to your
-                LinkedIn. Impress absolutely no one.
+                LinkedIn. Earn a free Starter Kit.
               </p>
               <a
                 href="/certify"

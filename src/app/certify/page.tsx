@@ -696,6 +696,22 @@ export default function Certify() {
                         ))}
                       </div>
                     </div>
+
+                    {/* Reward CTA */}
+                    <div className="mt-8 p-6 border-2 border-green/20 bg-green/5 text-center animate-fade-up delay-3">
+                      <p className="font-mono text-xs text-green tracking-[0.2em] mb-2">
+                        YOU EARNED IT
+                      </p>
+                      <p className="font-body text-fg-dim mb-4">
+                        Claim your free 50-card Starter Kit as a reward for passing.
+                      </p>
+                      <Link
+                        href="/reward"
+                        className="inline-block font-mono text-sm tracking-[0.2em] text-void bg-green hover:shadow-[0_0_30px_rgba(57,255,20,0.2)] px-8 py-3 transition-all duration-300"
+                      >
+                        CLAIM FREE KIT &rarr;
+                      </Link>
+                    </div>
                   </div>
                 ) : (
                   <div className="text-center animate-fade-up delay-2">
