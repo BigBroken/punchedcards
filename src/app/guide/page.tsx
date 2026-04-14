@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { SpiralAnimation } from "@/components/SpiralAnimation";
 
 export const metadata: Metadata = {
   title: "How to Build an LLM with Punch Cards — A Complete Guide | PUNCHED CARDS",
@@ -129,23 +130,42 @@ export default function Guide() {
         </div>
       </nav>
 
-      <article className="max-w-3xl mx-auto px-6 py-16 sm:py-24">
-        {/* ── TITLE ── */}
-        <header className="mb-16">
-          <p className="font-mono text-xs tracking-[0.4em] text-amber mb-4">
+      {/* ── SPIRAL (behind title) ── */}
+      <div className="relative h-[60vh] sm:h-[70vh] -mb-16 overflow-hidden">
+        <div className="absolute inset-0">
+          <SpiralAnimation />
+        </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6">
+          <p className="font-mono text-xs tracking-[0.4em] text-amber/80 mb-6">
             &#9670; COMPREHENSIVE GUIDE &#9670;
           </p>
-          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-fg-bright leading-[1.1] mb-6">
-            How to Build an LLM
+          <h1
+            className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-fg-bright text-center leading-[1.05] mb-6"
+            style={{ textShadow: "0 0 40px rgba(8,8,10,0.9), 0 0 80px rgba(8,8,10,0.8), 0 4px 20px rgba(8,8,10,1)" }}
+          >
+            ANYTHING IS POSSIBLE
             <br />
-            with Punch Cards
+            <span className="text-amber glow-amber">WITH PUNCH CARDS</span>
           </h1>
+          <p
+            className="font-body text-lg text-fg-dim text-center max-w-xl"
+            style={{ textShadow: "0 0 30px rgba(8,8,10,1), 0 0 60px rgba(8,8,10,1)" }}
+          >
+            A step-by-step guide to building a GPT-2-class LLM using nothing but
+            80-column punch cards.
+          </p>
+        </div>
+        {/* Fade to void at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-void to-transparent" />
+      </div>
+
+      <article className="relative z-10 max-w-3xl mx-auto px-6 py-16 sm:py-24">
+        {/* ── INTRO ── */}
+        <header className="mb-16">
           <p className="font-body text-lg text-fg-dim leading-relaxed mb-8">
-            A step-by-step technical guide to building a GPT-2-class large
-            language model using nothing but standard IBM 80-column punch
-            cards. We assume no prior punch card experience, but a strong
-            foundation in linear algebra and a high tolerance for large numbers
-            is recommended.
+            We assume no prior punch card experience, but a strong foundation
+            in linear algebra and a high tolerance for large numbers is
+            recommended.
           </p>
 
           {/* Model specs */}
