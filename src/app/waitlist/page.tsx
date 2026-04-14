@@ -145,7 +145,7 @@ export default function Waitlist() {
       setCardShake(true);
       setMistakeMsg(true);
       setTimeout(() => setCardShake(false), 500);
-      setTimeout(() => setMistakeMsg(false), 3000);
+      setTimeout(() => setMistakeMsg(false), 8000);
       return;
     }
     updateCard(activeCard, (card) => {
@@ -610,11 +610,16 @@ export default function Waitlist() {
                   </div>
 
                   {/* Mistake message */}
-                  <div className={`mt-2 text-center transition-opacity duration-300 ${mistakeMsg ? "opacity-100" : "opacity-0"}`}>
+                  <div className={`mt-3 text-center transition-opacity duration-300 flex items-center justify-center gap-3 ${mistakeMsg ? "opacity-100" : "opacity-0"}`}>
                     <span className="font-mono text-[10px] text-red/70">
-                      Can&apos;t unpunch card stock. Trash this card and start
-                      fresh.
+                      That hole is punched.
                     </span>
+                    <button
+                      onClick={addCard}
+                      className="font-mono text-[10px] text-amber border border-amber/30 px-2.5 py-1 hover:bg-amber/10 transition-colors cursor-pointer"
+                    >
+                      Need a new card?
+                    </button>
                   </div>
                 </div>
 

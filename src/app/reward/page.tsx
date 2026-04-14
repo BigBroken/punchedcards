@@ -67,7 +67,7 @@ export default function Reward() {
       setCardShake(true);
       setMistakeMsg(true);
       setTimeout(() => setCardShake(false), 500);
-      setTimeout(() => setMistakeMsg(false), 3000);
+      setTimeout(() => setMistakeMsg(false), 8000);
       return;
     }
     updateCard(activeCard, (card) => {
@@ -128,8 +128,12 @@ export default function Reward() {
                   </h1>
                   <p className="font-body text-lg text-fg-dim max-w-lg mx-auto leading-relaxed">
                     You proved your analog computing proficiency. As a reward,
-                    we&apos;ll send you a free Starter Kit when our next batch
-                    is ready. Keypunch your shipping email below.
+                    we&apos;ll send you a free Starter Kit. Keypunch your email
+                    and we&apos;ll ship it when it&apos;s ready.
+                  </p>
+                  <p className="font-mono text-[11px] text-fg-dim/50 max-w-md mx-auto mt-3">
+                    Please bear with us. We&apos;re scaling rapidly, but the
+                    correct way, using punch card technology.
                   </p>
                 </div>
 
@@ -343,10 +347,16 @@ export default function Reward() {
                   </div>
 
                   {/* Mistake message */}
-                  <div className={`mt-2 text-center transition-opacity duration-300 ${mistakeMsg ? "opacity-100" : "opacity-0"}`}>
+                  <div className={`mt-3 text-center transition-opacity duration-300 flex items-center justify-center gap-3 ${mistakeMsg ? "opacity-100" : "opacity-0"}`}>
                     <span className="font-mono text-[10px] text-red/70">
-                      Can&apos;t unpunch cardboard. Trash this card and start fresh.
+                      That hole is punched.
                     </span>
+                    <button
+                      onClick={addCard}
+                      className="font-mono text-[10px] text-amber border border-amber/30 px-2.5 py-1 hover:bg-amber/10 transition-colors cursor-pointer"
+                    >
+                      Need a new card?
+                    </button>
                   </div>
                 </div>
 
