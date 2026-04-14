@@ -341,6 +341,40 @@ export default function Home() {
           </div>
         </div>
 
+        {/* ── FEATURES ────────────────────────── */}
+        <section className="py-24 sm:py-32 px-6 border-t border-amber/10">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16 reveal">
+              <p className="font-mono text-xs tracking-[0.4em] text-amber mb-4">
+                &#9670; ADVANTAGES &#9670;
+              </p>
+              <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl text-fg-bright">
+                WHY PUNCH CARDS
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {FEATURES.map((feature, idx) => (
+                <div
+                  key={feature.title}
+                  className="reveal group bg-surface border border-amber/5 p-6 hover:border-amber/20 transition-all duration-300 hover:bg-elevated"
+                  style={{ transitionDelay: `${idx * 0.1}s` }}
+                >
+                  <div className="icon-glow font-mono text-2xl text-amber mb-4 transition-all duration-300">
+                    {feature.icon}
+                  </div>
+                  <h3 className="font-mono text-sm font-semibold text-fg-bright tracking-wide mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="font-body text-sm text-fg-dim leading-relaxed">
+                    {feature.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── PRODUCTS ────────────────────────── */}
         <section id="products" className="py-24 sm:py-32 px-6">
           <div className="max-w-6xl mx-auto">
@@ -573,39 +607,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── FEATURES ────────────────────────── */}
-        <section className="py-24 sm:py-32 px-6 border-t border-amber/10">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16 reveal">
-              <p className="font-mono text-xs tracking-[0.4em] text-amber mb-4">
-                &#9670; ADVANTAGES &#9670;
-              </p>
-              <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl text-fg-bright">
-                WHY PUNCH CARDS
-              </h2>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {FEATURES.map((feature, idx) => (
-                <div
-                  key={feature.title}
-                  className="reveal group bg-surface border border-amber/5 p-6 hover:border-amber/20 transition-all duration-300 hover:bg-elevated"
-                  style={{ transitionDelay: `${idx * 0.1}s` }}
-                >
-                  <div className="icon-glow font-mono text-2xl text-amber mb-4 transition-all duration-300">
-                    {feature.icon}
-                  </div>
-                  <h3 className="font-mono text-sm font-semibold text-fg-bright tracking-wide mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="font-body text-sm text-fg-dim leading-relaxed">
-                    {feature.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* ── CERTIFICATION ────────────────────── */}
         <section className="py-24 sm:py-32 px-6 border-t border-amber/10">
